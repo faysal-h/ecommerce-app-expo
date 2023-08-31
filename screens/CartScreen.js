@@ -66,7 +66,7 @@ const CartScreen = () => {
           <TextInput placeholder="Search Amazon.in" />
         </Pressable>
 
-        <Feather name="mic" size={24} color="black" />
+        <Feather name="shopping-cart" size={24} color="black" />
       </View>
 
       <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>

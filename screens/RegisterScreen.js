@@ -17,28 +17,28 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 const RegisterScreen = () => {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const navigation = useNavigation();
   const handleRegister = () => {
     const user = {
-      name: name,
-      email: email,
+      phone: phone,
+      name: userName,
       password: password,
     };
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://localhost:8000/register", user)
+      .post("http://localhost:8000/register/", user)
       .then((response) => {
         console.log(response);
         Alert.alert(
           "Registration successful",
           "You have been registered Successfully"
         );
-        setName("");
-        setEmail("");
+        setUserName("");
+        setPhone("");
         setPassword("");
       })
       .catch((error) => {
@@ -95,13 +95,13 @@ const RegisterScreen = () => {
               style={{ marginLeft: 8 }}
             />
             <TextInput
-              value={name}
-              onChangeText={(text) => setName(text)}
+              value={userName}
+              onChangeText={(text) => setUserName(text)}
               style={{
                 color: "gray",
                 marginVertical: 10,
                 width: 300,
-                fontSize: name ? 16 : 16,
+                fontSize: userName ? 16 : 16,
               }}
               placeholder="enter your name"
             />
@@ -120,22 +120,28 @@ const RegisterScreen = () => {
           >
             <MaterialIcons
               style={{ marginLeft: 8 }}
-              name="email"
+              name="phone"
               size={24}
               color="gray"
             />
-
-            <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
+            <NumberFormat 
+              type="tel"
+              format="+1 (###) ###-####" 
+              mask="_" 
+              onValueChange={value => setPhone(value.formattedValue)}
+              required
+            />
+            {/* <TextInput
+              value={phone}
+              onChangeText={(text) => setPhone(text)}
               style={{
                 color: "gray",
                 marginVertical: 10,
                 width: 300,
                 fontSize: password ? 16 : 16,
               }}
-              placeholder="enter your Email"
-            />
+              placeholder="Enter your Phone Number"
+            /> */}
           </View>
         </View>
 
@@ -159,6 +165,7 @@ const RegisterScreen = () => {
             />
 
             <TextInput
+              keyboardType="phone-pad"
               value={password}
               onChangeText={(text) => setPassword(text)}
               secureTextEntry={true}
@@ -166,7 +173,7 @@ const RegisterScreen = () => {
                 color: "gray",
                 marginVertical: 10,
                 width: 300,
-                fontSize: email ? 16 : 16,
+                fontSize: phone ? 16 : 16,
               }}
               placeholder="enter your Password"
             />

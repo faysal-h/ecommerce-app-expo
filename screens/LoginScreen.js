@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState,useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -16,7 +17,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   useEffect(() => {
@@ -28,27 +29,29 @@ const LoginScreen = () => {
           navigation.replace("Main");
         }
       } catch (err) {
-        console.log("error message", err);
+        console.log("Token Authentication  Failed.", err);
       }
     };
     checkLoginStatus();
   }, []);
   const handleLogin = () => {
     const user = {
-      email: email,
+      phone: phone,
       password: password,
     };
 
     axios
-      .post("http://localhost:8000/login", user)
+      .post("http://localhost:8000/token/", user)
       .then((response) => {
-        console.log(response);
-        const token = response.data.token;
-        AsyncStorage.setItem("authToken", token);
+        console.log(response.data);
+        const accessToken = response.data.access;
+        const refreshToken = response.data.access;
+        AsyncStorage.setItem("authToken", accessToken);
+        AsyncStorage.setItem("refreshToken", refreshToken);
         navigation.replace("Main");
       })
       .catch((error) => {
-        Alert.alert("Login Error", "Invalid Email");
+        Alert.alert("Login Error Occured", "Invalid Phone Number");
         console.log(error);
       });
   };
@@ -93,21 +96,22 @@ const LoginScreen = () => {
           >
             <MaterialIcons
               style={{ marginLeft: 8 }}
-              name="email"
+              name="phone"
               size={24}
               color="gray"
             />
 
             <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
+              keyboardType="phone-pad"
+              value={phone}
+              onChangeText={(text) => setPhone(text)}
               style={{
                 color: "gray",
                 marginVertical: 10,
                 width: 300,
-                fontSize: email ? 16 : 16,
+                fontSize: phone ? 16 : 16,
               }}
-              placeholder="enter your Email"
+              placeholder="Enter your Phone Number"
             />
           </View>
         </View>
@@ -141,7 +145,7 @@ const LoginScreen = () => {
                 width: 300,
                 fontSize: password ? 16 : 16,
               }}
-              placeholder="enter your Password"
+              placeholder="Enter your Password"
             />
           </View>
         </View>
