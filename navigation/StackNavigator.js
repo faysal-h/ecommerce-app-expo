@@ -16,6 +16,7 @@ import CartScreen from "../screens/CartScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ConfirmationScreen from "../screens/ConfirmationScreen";
 import OrderScreen from "../screens/OrderScreen";
+import CartBadge from "../components/CartBadge";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -63,9 +64,16 @@ const StackNavigator = () => {
             headerShown: false,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <AntDesign name="shoppingcart" size={24} color="#008E97" />
+                <View>
+                  <AntDesign name="shoppingcart" size={24} color="#008E97" />
+                  <CartBadge  />
+                </View>
+
               ) : (
-                <AntDesign name="shoppingcart" size={24} color="black" />
+                <View>
+                  <AntDesign name="shoppingcart" size={26} color="black" />
+                  <CartBadge  />
+                </View>
               ),
           }}
         />
