@@ -26,10 +26,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserType } from "../UserContext";
 import jwt_decode from "jwt-decode";
 import CartIcon from "../components/CartBadge";
+import FilterView from "../components/FilterView";
+import CartBadge from "../components/CartBadge";
+import SearchBarCustom from "../components/SearchBar";
 
 
 const HomeScreen = () => {
-  const images = [
+  const navigation = useNavigation();
+  
+  const imagesSlider = [
     "https://img.etimg.com/thumb/msid-93051525,width-1070,height-580,imgsize-2243475,overlay-economictimes/photo.jpg",
     "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x550_3.gif",
     "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Books/BB/JULY/1242x550_Header-BB-Jul23.jpg",
@@ -40,9 +45,9 @@ const HomeScreen = () => {
       title: "OnePlus Nord CE 3 Lite 5G (Pastel Lime, 8GB RAM, 128GB Storage)",
       oldPrice: 25000,
       price: 19000,
-      image:
+      images:
+      [
         "https://images-eu.ssl-images-amazon.com/images/G/31/wireless_products/ssserene/weblab_wf/xcm_banners_2022_in_bau_wireless_dec_580x800_once3l_v2_580x800_in-en.jpg",
-      carouselImages: [
         "https://m.media-amazon.com/images/I/61QRgOgBx0L._SX679_.jpg",
         "https://m.media-amazon.com/images/I/61uaJPLIdML._SX679_.jpg",
         "https://m.media-amazon.com/images/I/510YZx4v3wL._SX679_.jpg",
@@ -57,9 +62,9 @@ const HomeScreen = () => {
         "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage) with No Cost EMI & Additional Exchange Offers",
       oldPrice: 74000,
       price: 26000,
-      image:
+      images:
+      [
         "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/SamsungBAU/S20FE/GW/June23/BAU-27thJune/xcm_banners_2022_in_bau_wireless_dec_s20fe-rv51_580x800_in-en.jpg",
-      carouselImages: [
         "https://m.media-amazon.com/images/I/81vDZyJQ-4L._SY879_.jpg",
         "https://m.media-amazon.com/images/I/61vN1isnThL._SX679_.jpg",
         "https://m.media-amazon.com/images/I/71yzyH-ohgL._SX679_.jpg",
@@ -74,9 +79,9 @@ const HomeScreen = () => {
         "Samsung Galaxy M14 5G (ICY Silver, 4GB, 128GB Storage) | 50MP Triple Cam | 6000 mAh Battery | 5nm Octa-Core Processor | Android 13 | Without Charger",
       oldPrice: 16000,
       price: 14000,
-      image:
+      images:
+      [
         "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/CatPage/Tiles/June/xcm_banners_m14_5g_rv1_580x800_in-en.jpg",
-      carouselImages: [
         "https://m.media-amazon.com/images/I/817WWpaFo1L._SX679_.jpg",
         "https://m.media-amazon.com/images/I/81KkF-GngHL._SX679_.jpg",
         "https://m.media-amazon.com/images/I/61IrdBaOhbL._SX679_.jpg",
@@ -85,14 +90,14 @@ const HomeScreen = () => {
       size: "6 GB RAM 64GB Storage",
     },
     {
-      id: "40",
+      id: "50",
       title:
         "realme narzo N55 (Prime Blue, 4GB+64GB) 33W Segment Fastest Charging | Super High-res 64MP Primary AI Camera",
       oldPrice: 12999,
       price: 10999,
-      image:
+      images:
+      [
         "https://images-eu.ssl-images-amazon.com/images/G/31/tiyesum/N55/June/xcm_banners_2022_in_bau_wireless_dec_580x800_v1-n55-marchv2-mayv3-v4_580x800_in-en.jpg",
-      carouselImages: [
         "https://m.media-amazon.com/images/I/41Iyj5moShL._SX300_SY300_QL70_FMwebp_.jpg",
         "https://m.media-amazon.com/images/I/61og60CnGlL._SX679_.jpg",
         "https://m.media-amazon.com/images/I/61twx1OjYdL._SX679_.jpg",
@@ -162,20 +167,49 @@ const HomeScreen = () => {
       size: "8GB RAM, 128GB Storage",
     },
   ];
-  const [products, setProducts] = useState([]);
-  const navigation = useNavigation();
-  const [open, setOpen] = useState(false);
-  const [addresses, setAddresses] = useState([]);
-  const [category, setCategory] = useState("jewelery");
-  const { userId, setUserId } = useContext(UserType);
-  const [selectedAddress,setSelectedAdress] = useState("");
-  console.log(selectedAddress)
+  // const [items, setItems] = useState([
+  //   { label: "Men's clothing", value: "men's clothing" },
+  //   { label: "Jewelery", value: "jewelery" },
+  //   { label: "Electronics", value: "electronics" },
+  //   { label: "Women's clothing", value: "women's clothing" },
+  // ]);
   const [items, setItems] = useState([
     { label: "Men's clothing", value: "men's clothing" },
-    { label: "jewelery", value: "jewelery" },
-    { label: "electronics", value: "electronics" },
-    { label: "women's clothing", value: "women's clothing" },
+    { label: "Jewelery", value: "jewelery" },
+    { label: "Electronics", value: "electronics" },
+    { label: "Women's clothing", value: "women's clothing" },
   ]);
+  const categories = [
+    {
+      name: "men's clothing",
+      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
+    },
+    {
+      name: "jewelery",
+      icon:  "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
+    },
+    {
+      name: "Electronics",
+      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
+    },
+    {
+      name: "Women's clothing",
+      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
+    },
+    {
+      name: "clothing",
+      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
+    },
+    // Add more categories with their respective icon URIs as needed
+  ];
+  
+
+  const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState();
+  const { userId, setUserId } = useContext(UserType);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -188,29 +222,13 @@ const HomeScreen = () => {
 
     fetchData();
   }, []);
+
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(false);
   }, []);
 
   const cart = useSelector((state) => state.cart.cart);
-  const [modalVisible, setModalVisible] = useState(false);
-  useEffect(() => {
-    if (userId) {
-      fetchAddresses();
-    }
-  }, [userId, modalVisible]);
-  const fetchAddresses = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/addresses/${userId}`
-      );
-      const { addresses } = response.data;
-
-      setAddresses(addresses);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  
   useEffect(() => {
     const fetchUser = async () => {
       const token = await AsyncStorage.getItem("authToken");
@@ -218,65 +236,16 @@ const HomeScreen = () => {
       const userId = decodedToken.userId;
       setUserId(userId);
     };
-
     fetchUser();
   }, []);
-  console.log("address", addresses);
+
   return (
     <>
-      <SafeAreaView
-        style={{
-          paddingTop: Platform.OS === "android" ? 25 : 0,
-          flex: 1,
-          backgroundColor: "white",
-        }}
-      >
-          <View style={stylesSearchBar.view}>
-            <Pressable style={stylesSearchBar.pressable}>
-              <AntDesign
-                style={stylesSearchBar.icon}
-                name="search1"
-                size={22}
-                color="black"
-              />
-              <TextInput placeholder="Search Store" />
-            </Pressable>
-            <Pressable>
-              <CartIcon />
-
-            </Pressable>
-          </View>
+        <SearchBarCustom />
         <ScrollView>
-
-          <Pressable
-            onPress={() => setModalVisible(!modalVisible)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 5,
-              padding: 10,
-              backgroundColor: "#AFEEEE",
-            }}
-          >
-            <Ionicons name="location-outline" size={24} color="black" />
-
-            <Pressable>
-            {selectedAddress ? (
-                <Text>
-                  Deliver to {selectedAddress?.name} - {selectedAddress?.street}
-                </Text>
-              ) : (
-                <Text style={{ fontSize: 13, fontWeight: "500" }}>
-                    Add an Address
-                </Text>
-              )}
-            </Pressable>
-
-            <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
-          </Pressable>
-
+          {/* SLIDER BOX */}
           <SliderBox
-            images={images}
+            images={imagesSlider}
             autoPlay
             circleLoop
             dotColor={"#13274F"}
@@ -284,190 +253,66 @@ const HomeScreen = () => {
             ImageComponentStyle={{ width: "100%" }}
           />
 
-          <Text style={{ padding: 10, fontSize: 18, fontWeight: "bold" }}>
+          {/* OFFERS BOX  */}
+          <Text style={stylesOffer.heading}>
             Trending Deals of the week
           </Text>
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
+          <View style={stylesOffer.container}>
             {deals.map((item, index) => (
               <Pressable
+                key={item.id}
                 onPress={() =>
                   navigation.navigate("Info", {
-                    id: item.id,
-                    title: item.title,
-                    price: item?.price,
-                    carouselImages: item.carouselImages,
-                    color: item?.color,
-                    size: item?.size,
-                    oldPrice: item?.oldPrice,
                     item: item,
                   })
                 }
-                style={{
-                  marginVertical: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
+                style={stylesOffer.pressable}
               >
                 <Image
-                  style={{ width: 180, height: 180, resizeMode: "contain" }}
-                  source={{ uri: item?.image }}
+                  style={stylesOffer.image}
+                  source={{ uri: item?.images[0] }}
                 />
               </Pressable>
             ))}
           </View>
-
+          
+          {/* BORDER */}
           <Text
             style={{
               height: 1,
               borderColor: "#D0D0D0",
-              borderWidth: 2,
+              borderWidth: 5,
               marginTop: 15,
             }}
           />
 
-          <Text style={{ padding: 10, fontSize: 18, fontWeight: "bold" }}>
-            Today's Deals
-          </Text>
-
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {offers.map((item, index) => (
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("Info", {
-                    id: item.id,
-                    title: item.title,
-                    price: item?.price,
-                    carouselImages: item.carouselImages,
-                    color: item?.color,
-                    size: item?.size,
-                    oldPrice: item?.oldPrice,
-                    item: item,
-                  })
-                }
-                style={{
-                  marginVertical: 10,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  style={{ width: 150, height: 150, resizeMode: "contain" }}
-                  source={{ uri: item?.image }}
-                />
-
-                <View
-                  style={{
-                    backgroundColor: "#E31837",
-                    paddingVertical: 5,
-                    width: 130,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: 10,
-                    borderRadius: 4,
-                  }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      color: "white",
-                      fontSize: 13,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Upto {item?.offer}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
-          </ScrollView>
-
-          <Text
-            style={{
-              height: 1,
-              borderColor: "#D0D0D0",
-              borderWidth: 2,
-              marginTop: 15,
-            }}
-          />
-
-          <View
-            style={{
-              marginHorizontal: 10,
-              marginTop: 20,
-              width: "45%",
-              marginBottom: open ? 50 : 15,
-            }}
-          >
-            <DropDownPicker
-              style={{
-                borderColor: "#B7B7B7",
-                height: 30,
-                marginBottom: open ? 120 : 15,
-              }}
-              open={open}
-              value={category} //genderValue
-              items={items}
-              setOpen={setOpen}
-              setValue={setCategory}
-              setItems={setItems}
-              placeholder="choose category"
-              placeholderStyle={styles.placeholderStyles}
-              onOpen={onGenderOpen}
-              // onChangeValue={onChange}
-              zIndex={3000}
-              zIndexInverse={1000}
-            />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            {products
-              ?.filter((item) => item.category === category)
-              .map((item, index) => (
-                <ProductItem item={item} key={index} />
-              ))}
-          </View>
         </ScrollView>
-      </SafeAreaView>
-
-
     </>
   );
 };
 
 export default HomeScreen;
 
-const stylesSearchBar = StyleSheet.create({
-  view: {
-    backgroundColor: "#00CED1",
-    padding: 10,
+const stylesOffer = StyleSheet.create({
+  heading: { 
+    padding: 10, 
+    fontSize: 18, 
+    fontWeight: "bold" },
+  container: {
     flexDirection: "row",
     alignItems: "center",
+    flexWrap: "wrap",
   },
   pressable: {
+    marginVertical: 10,
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 7,
-    gap: 10,
-    backgroundColor: "white",
-    borderRadius: 3,
-    height: 38,
-    flex: 1,
   },
-  icon: {
-    paddingLeft: 10,
+  image: {
+    width: 180,
+    height: 180,
+    resizeMode: "contain",
   },
 });
 

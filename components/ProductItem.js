@@ -2,10 +2,15 @@ import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/CartReducer";
+import { useNavigation } from "@react-navigation/native";
+import AddToCart from "./AddToCart";
 
 const ProductItem = ({ item }) => {
+  console.log(typeof(item))
+  console.log(item)
   const [addedToCart, setAddedToCart] = useState(false);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const addItemToCart = (item) => {
     setAddedToCart(true);
     dispatch(addToCart(item));
@@ -14,13 +19,19 @@ const ProductItem = ({ item }) => {
     }, 60000);
   };
   return (
-    <Pressable style={{ marginHorizontal: 20, marginVertical: 25 }}>
+    <Pressable 
+      style={{ marginHorizontal: 25, marginVertical: 25 }}
+      onPress={() =>
+        navigation.navigate("Info", {
+        item: item,}
+        )}
+    >
       <Image
         style={{ width: 150, height: 150, resizeMode: "contain" }}
         source={{ uri: item?.image }}
       />
 
-      <Text numberOfLines={1} style={{ width: 150, marginTop: 10 }}>
+      <Text numberOfLines={2} style={{ width: 150, marginTop: 10 }}>
         {item?.title}
       </Text>
 
@@ -32,32 +43,12 @@ const ProductItem = ({ item }) => {
           justifyContent: "space-between",
         }}
       >
-        <Text style={{ fontSize: 15, fontWeight: "bold" }}>₹{item?.price}</Text>
+        <Text style={{ fontSize: 15, fontWeight: "bold" }}>Rs.{item?.price}</Text>
         <Text style={{ color: "#FFC72C", fontWeight: "bold" }}>
-          {item?.rating?.rate} ratings
+        ⭐ {item?.rating?.rate} /5
         </Text>
       </View>
-
-      <Pressable
-        onPress={() => addItemToCart(item)}
-        style={{
-          backgroundColor: "#FFC72C",
-          padding: 10,
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          marginHorizontal: 10,
-          marginTop: 10,
-        }}
-      >
-        {addedToCart ? (
-          <View>
-            <Text>Added to Cart</Text>
-          </View>
-        ) : (
-          <Text>Add to Cart</Text>
-        )}
-      </Pressable>
+      <AddToCart item={item} />
     </Pressable>
   );
 };

@@ -17,6 +17,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import ConfirmationScreen from "../screens/ConfirmationScreen";
 import OrderScreen from "../screens/OrderScreen";
 import CartBadge from "../components/CartBadge";
+import ProductsScreen from "../screens/ProductsScreen";
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -36,6 +37,22 @@ const StackNavigator = () => {
                 <Entypo name="home" size={24} color="#008E97" />
               ) : (
                 <AntDesign name="home" size={24} color="black" />
+              ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Products"
+          component={ProductsScreen}
+          options={{
+            tabBarLabel: "Products",
+            tabBarLabelStyle: { color: "#008E97" },
+            headerShown: false,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Ionicons name="apps-outline" size={24} color="#008E97" />
+              ) : (
+                <Ionicons name="apps-outline" size={24} color="black" />
               ),
           }}
         />
@@ -96,6 +113,11 @@ const StackNavigator = () => {
         <Stack.Screen
           name="Main"
           component={BottomTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Products"
+          component={ProductsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

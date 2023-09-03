@@ -17,6 +17,7 @@ import {
   removeFromCart,
 } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
+import SearchBarCustom from "../components/SearchBar";
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
@@ -36,38 +37,8 @@ const CartScreen = () => {
   };
   const navigation = useNavigation();
   return (
-    <ScrollView style={{ marginTop: 55, flex: 1, backgroundColor: "white" }}>
-      <View
-        style={{
-          backgroundColor: "#00CED1",
-          padding: 10,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Pressable
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginHorizontal: 7,
-            gap: 10,
-            backgroundColor: "white",
-            borderRadius: 3,
-            height: 38,
-            flex: 1,
-          }}
-        >
-          <AntDesign
-            style={{ paddingLeft: 10 }}
-            name="search1"
-            size={22}
-            color="black"
-          />
-          <TextInput placeholder="Search Amazon.in" />
-        </Pressable>
-
-        <Feather name="shopping-cart" size={24} color="black" />
-      </View>
+    <ScrollView style={{ marginTop: 0, flex: 1, backgroundColor: "white" }}>
+      <SearchBarCustom />
 
       <View style={{ padding: 10, flexDirection: "row", alignItems: "center" }}>
         <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal : </Text>
