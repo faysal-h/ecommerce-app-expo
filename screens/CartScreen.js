@@ -156,8 +156,7 @@ const CartScreen = () => {
                     style={{
                       backgroundColor: "#D8D8D8",
                       padding: 7,
-                      borderTopLeftRadius: 6,
-                      borderBottomLeftRadius: 6,
+                      borderRadius: 3,
                     }}
                   >
                     <AntDesign name="delete" size={24} color="black" />
@@ -179,8 +178,8 @@ const CartScreen = () => {
                   style={{
                     backgroundColor: "#D8D8D8",
                     padding: 7,
-                    borderTopLeftRadius: 6,
-                    borderBottomLeftRadius: 6,
+                    borderRadius: 3,
+
                   }}
                 >
                   <Feather name="plus" size={24} color="black" />
@@ -209,31 +208,6 @@ const CartScreen = () => {
                 marginBottom: 15,
               }}
             >
-              <Pressable
-                style={{
-                  backgroundColor: "white",
-                  paddingHorizontal: 8,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  borderColor: "#C0C0C0",
-                  borderWidth: 0.6,
-                }}
-              >
-                <Text>Save For Later</Text>
-              </Pressable>
-
-              <Pressable
-                style={{
-                  backgroundColor: "white",
-                  paddingHorizontal: 8,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  borderColor: "#C0C0C0",
-                  borderWidth: 0.6,
-                }}
-              >
-                <Text>See More Like this</Text>
-              </Pressable>
             </Pressable>
           </View>
         ))}

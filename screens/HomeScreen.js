@@ -301,7 +301,8 @@ const stylesOffer = StyleSheet.create({
     fontWeight: "bold" },
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent:'space-evenly',
+    alignItems: 'center',
     flexWrap: "wrap",
   },
   pressable: {

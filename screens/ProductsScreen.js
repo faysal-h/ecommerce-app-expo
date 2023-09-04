@@ -113,8 +113,8 @@ const ProductsScreen = () => {
           >
             {products?.filter((item) => item.category === category)
               .map((item, index) => (
-                <View>
-                <ProductItem key={item.id} item={item}/>
+                <View key={item.id}>
+                  <ProductItem item={item}/>
                 </View>
               ))}
           </View>

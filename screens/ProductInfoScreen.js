@@ -214,20 +214,6 @@ const ProductInfoScreen = () => {
         IN Stock
       </Text>
       <AddToCart item={route?.params?.item} />
-
-      <Pressable
-        style={{
-          backgroundColor: "#FFAC1C",
-          padding: 10,
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          marginHorizontal: 10,
-          marginVertical: 10,
-        }}
-      >
-        <Text>Buy Now</Text>
-      </Pressable>
     </ScrollView>
   );
 };
