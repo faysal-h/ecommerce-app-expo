@@ -32,8 +32,6 @@ const ProductInfoScreen = () => {
     }, 60000);
   };
   const cart = useSelector((state) => state.cart.cart);
-  console.log('CART',cart);
-  console.log("PRODUCT INFO", route.params.item)
   return (
     <ScrollView
       // style={{ marginTop: 0, flex: 1, backgroundColor: "white" }}

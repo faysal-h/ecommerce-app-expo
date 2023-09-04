@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { Pressable, StyleSheet, View, Text} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, incementQuantity, decrementQuantity, removeFromCart } from "../redux/CartReducer";
-import { Button } from "@rneui/themed";
+import { addToCart, incrementQuantity, decrementQuantity } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -16,10 +15,20 @@ const AddToCart = ({item}) => {
     }, [dispatch, item]);
 
     const increaseQuantity = () => {
-      dispatch(incementQuantity(itemInCart));
+      dispatch(incrementQuantity(itemInCart));
     };
     const decreaseQuantity = () => {
       dispatch(decrementQuantity(itemInCart));
+    };
+    const handleBuyNow = () => {
+      if (itemInCart) {
+        // If the item is already in the cart, navigate to the Cart screen.
+        navigation.navigate('Cart');
+      } else {
+        // If the item is not in the cart, add it to the cart and then navigate to the Cart screen.
+        addItemToCart();
+        navigation.navigate('Cart');
+      }
     };
     return(
         <View>
@@ -49,8 +58,8 @@ const AddToCart = ({item}) => {
           
 
             <Pressable 
-            style={styles.buyNowButton}
-            onPress={itemInCart ? navigation.navigate('Cart') : () => addItemToCart() && navigation.navigate('Cart') }
+              style={styles.buyNowButton}
+              onPress={() => handleBuyNow()}
             >
                 <Text>Buy Now</Text>
             </Pressable>
