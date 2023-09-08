@@ -65,7 +65,7 @@ const RegisterScreen = () => {
   };
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white", alignItems: "center",marginTop:10  }}
+      style={{ flex: 1, backgroundColor: "#f1f4f0", alignItems: "center",marginTop:0  }}
     >
       <View>
         <Image
@@ -83,11 +83,11 @@ const RegisterScreen = () => {
           keyboardVerticalOffset={Platform.select({ ios: 80, android: 50 }
           )}>
         <View style={styles.container}>
-          <FontAwesome5 name="user-circle" size={54} color="black" />
+          <FontAwesome5 name="user-circle" size={100} color="#ff9900" />
           <Text style={styles.title}>Register Account</Text>
         </View>
 
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 10 }}>
           <View style={styles.inputContainer}>
             <Ionicons name="ios-person" size={24} color="gray" style={styles.icon} />
             <TextInput
@@ -99,17 +99,17 @@ const RegisterScreen = () => {
           </View>
           <View style={styles.inputContainer}>
             <MaterialIcons name="phone" size={24} color="gray" style={styles.icon} />
-            {/* Replace PhoneInput with a regular TextInput */}
+            {/* PhoneInput */}
             <PhoneInput
               value={phone}
               onChangePhoneNumber={(number) => setPhone(number)}
               initialCountry="pk"
-              allowZeroAfterCountryCode = 'true'
+              // allowZeroAfterCountryCode = 'true'
               textProps={{placeholder: 'Phone number'}}
               // onPressFlag={toggleCountryPicker}w
               style={{flex:1, margin:15}}
               textStyle={{fontSize:16}}
-              textInputProps={{ maxLength: 12 }}
+              textInputProps={{ maxLength: 10 }}
               
               />
           </View>
@@ -130,14 +130,17 @@ const RegisterScreen = () => {
           <Text style={{ color: '#007FFF', fontWeight: '500' }}>Forgot Password</Text>
         </View>
 
-        <View style={{ marginTop: 80 }} />
+        <View style={{ marginTop: 40 }} />
 
         <Pressable onPress={handleRegister} style={styles.button}>
           <Text style={styles.buttonText}>Register</Text>
         </Pressable>
+        <Text style={{paddingTop:20, paddingBottom:10, textAlign: 'center', color: 'gray', fontSize: 16 }}>
+          Already have an account?
+        </Text>
 
-        <Pressable onPress={() => navigation.goBack()} style={styles.link}>
-          <Text>Already have an account? Sign In</Text>
+        <Pressable onPress={() => navigation.goBack()} style={styles.loginButton}>
+          <Text style={styles.buttonText}>Sign In</Text>
         </Pressable>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -154,10 +157,10 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginTop: 12,
-    borderWidth:4,
-    borderColor:'lightgray',
+    // borderWidth:4,
+    // borderColor:'lightgray',
     padding:10,
-    borderRadius:5,
+    // borderRadius:5,
     color: 'black',
   },
   inputContainer: {
@@ -197,5 +200,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     fontSize: 16,
+  },
+  loginButton: {
+    width: 200,
+    backgroundColor: '#00b33c',
+    borderRadius: 6,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    padding: 15,
   },
 });
