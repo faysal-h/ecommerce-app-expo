@@ -11,222 +11,133 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import PhoneInput
+	from 'react-native-phone-input';
+
 
 const RegisterScreen = () => {
   const [phone, setPhone] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
-  const handleRegister = () => {
-    const user = {
-      phone: phone,
-      name: userName,
-      password: password,
-    };
+  
 
-    // send a POST  request to the backend API to register the user
-    axios
-      .post("http://localhost:8000/register/", user)
-      .then((response) => {
-        console.log(response);
-        Alert.alert(
-          "Registration successful",
-          "You have been registered Successfully"
-        );
-        setUserName("");
-        setPhone("");
-        setPassword("");
-      })
-      .catch((error) => {
-        Alert.alert(
-          "Registration Error",
-          "An error occurred while registering"
-        );
-        console.log("registration failed", error);
-      });
+  const handleRegister = () => {
+    if (phone.length === 13 || phone.length === 14){
+      const user = {
+        phone: phone,
+        name: userName,
+        password: password,
+      };
+
+      // send a POST  request to the backend API to register the user
+      axios
+        .post("http://localhost:8000/register/", user)
+        .then((response) => {
+          console.log(response);
+          Alert.alert(
+            "Registration successful",
+            "You have been registered Successfully"
+          );
+          setUserName("");
+          setPhone("");
+          setPassword("");
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Registration Error",
+            "An error occurred while registering"
+          );
+          console.log("registration failed", error);
+        });
+      }
+      else if(password.length <= 7){
+        Alert.alert('Invalid Password','Password length should be greater than 6') 
+      }
+      else{
+        Alert.alert('Invalid Phone Number','Enter a Valid phone number.')
+      }
   };
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white", alignItems: "center",marginTop:50  }}
+      style={{ flex: 1, backgroundColor: "white", alignItems: "center",marginTop:10  }}
     >
       <View>
         <Image
-          style={{ width: 150, height: 100 }}
+          style={{ width: 150, height: 50 }}
           source={{
-            uri: "https://assets.stickpng.com/thumbs/6160562276000b00045a7d97.png",
+            // uri: "https://assets.stickpng.com/thumbs/6160562276000b00045a7d97.png",
           }}
         />
       </View>
 
-      <KeyboardAvoidingView>
-        <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 17,
-              fontWeight: "bold",
-              marginTop: 12,
-              color: "#041E42",
-            }}
-          >
-            Register to your Account
-          </Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}         
+        behavior={(Platform.OS === 'android') ? 'height' : null}
+          enabled
+          keyboardVerticalOffset={Platform.select({ ios: 80, android: 50 }
+          )}>
+        <View style={styles.container}>
+          <FontAwesome5 name="user-circle" size={54} color="black" />
+          <Text style={styles.title}>Register Account</Text>
         </View>
 
-        <View style={{ marginTop: 70 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 5,
-              backgroundColor: "#D0D0D0",
-              paddingVertical: 5,
-              borderRadius: 5,
-              marginTop: 30,
-            }}
-          >
-            <Ionicons
-              name="ios-person"
-              size={24}
-              color="gray"
-              style={{ marginLeft: 8 }}
-            />
+        <View style={{ marginTop: 20 }}>
+          <View style={styles.inputContainer}>
+            <Ionicons name="ios-person" size={24} color="gray" style={styles.icon} />
             <TextInput
               value={userName}
               onChangeText={(text) => setUserName(text)}
-              style={{
-                color: "gray",
-                marginVertical: 10,
-                width: 300,
-                fontSize: userName ? 16 : 16,
-              }}
-              placeholder="enter your name"
+              style={styles.textInput}
+              placeholder="Enter your Name"
             />
           </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 5,
-              backgroundColor: "#D0D0D0",
-              paddingVertical: 5,
-              borderRadius: 5,
-              marginTop: 30,
-            }}
-          >
-            <MaterialIcons
-              style={{ marginLeft: 8 }}
-              name="phone"
-              size={24}
-              color="gray"
-            />
-            <NumberFormat 
-              type="tel"
-              format="+1 (###) ###-####" 
-              mask="_" 
-              onValueChange={value => setPhone(value.formattedValue)}
-              required
-            />
-            {/* <TextInput
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="phone" size={24} color="gray" style={styles.icon} />
+            {/* Replace PhoneInput with a regular TextInput */}
+            <PhoneInput
               value={phone}
-              onChangeText={(text) => setPhone(text)}
-              style={{
-                color: "gray",
-                marginVertical: 10,
-                width: 300,
-                fontSize: password ? 16 : 16,
-              }}
-              placeholder="Enter your Phone Number"
-            /> */}
+              onChangePhoneNumber={(number) => setPhone(number)}
+              initialCountry="pk"
+              allowZeroAfterCountryCode = 'true'
+              textProps={{placeholder: 'Phone number'}}
+              // onPressFlag={toggleCountryPicker}w
+              style={{flex:1, margin:15}}
+              textStyle={{fontSize:16}}
+              textInputProps={{ maxLength: 12 }}
+              
+              />
           </View>
-        </View>
-
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 5,
-              backgroundColor: "#D0D0D0",
-              paddingVertical: 5,
-              borderRadius: 5,
-              marginTop: 30,
-            }}
-          >
-            <AntDesign
-              name="lock1"
-              size={24}
-              color="gray"
-              style={{ marginLeft: 8 }}
-            />
-
+          <View style={styles.inputContainer}>
+            <AntDesign name="lock1" size={24} color="gray" style={styles.icon} />
             <TextInput
-              keyboardType="phone-pad"
               value={password}
               onChangeText={(text) => setPassword(text)}
               secureTextEntry={true}
-              style={{
-                color: "gray",
-                marginVertical: 10,
-                width: 300,
-                fontSize: phone ? 16 : 16,
-              }}
+              style={styles.textInput}
               placeholder="enter your Password"
             />
           </View>
         </View>
 
-        <View
-          style={{
-            marginTop: 12,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <View style={{ marginTop: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text>Keep me logged in</Text>
-
-          <Text style={{ color: "#007FFF", fontWeight: "500" }}>
-            Forgot Password
-          </Text>
+          <Text style={{ color: '#007FFF', fontWeight: '500' }}>Forgot Password</Text>
         </View>
 
         <View style={{ marginTop: 80 }} />
 
-        <Pressable
-          onPress={handleRegister}
-          style={{
-            width: 200,
-            backgroundColor: "#FEBE10",
-            borderRadius: 6,
-            marginLeft: "auto",
-            marginRight: "auto",
-            padding: 15,
-          }}
-        >
-          <Text
-            style={{
-              textAlign: "center",
-              color: "white",
-              fontSize: 16,
-              fontWeight: "bold",
-            }}
-          >
-            Register
-          </Text>
+        <Pressable onPress={handleRegister} style={styles.button}>
+          <Text style={styles.buttonText}>Register</Text>
         </Pressable>
 
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={{ marginTop: 15 }}
-        >
-          <Text style={{ textAlign: "center", color: "gray", fontSize: 16 }}>
-            Already have an account? Sign In
-          </Text>
+        <Pressable onPress={() => navigation.goBack()} style={styles.link}>
+          <Text>Already have an account? Sign In</Text>
         </Pressable>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -235,4 +146,56 @@ const RegisterScreen = () => {
 
 export default RegisterScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginTop: 12,
+    borderWidth:4,
+    borderColor:'lightgray',
+    padding:10,
+    borderRadius:5,
+    color: 'black',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#D0D0D0',
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginTop: 30,
+  },
+  icon: {
+    marginLeft: 8,
+  },
+  textInput: {
+    color: 'black',
+    marginVertical: 10,
+    width: 300,
+    fontSize: 16,
+  },
+  button: {
+    width: 200,
+    backgroundColor: '#FEBE10',
+    borderRadius: 6,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    padding: 15,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  link: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: 'gray',
+    fontSize: 16,
+  },
+});
