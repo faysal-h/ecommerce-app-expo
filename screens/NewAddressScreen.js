@@ -7,13 +7,12 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import React, { useEffect, useState,useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState,useContext } from "react";
 
 import { UserType } from "../UserContext";
 import API from "../axios/AxiosConfig";
 import { useNavigation } from "@react-navigation/native";
-import { formToJSON } from "axios";
+
 
 const NewAddressScreen = () => {
   const navigation = useNavigation();
@@ -26,8 +25,6 @@ const NewAddressScreen = () => {
   const [province, setProvince] = useState("Punjab");
   const [country, setCountry] = useState("Pakistan");
   const [postal_code, setPostal_code] = useState(54000);
-  const {userId,setUserId} = useContext(UserType)
-  console.log('User ID in New Addres Screen is '.userId)
   const handleAddAddress = () => {
       const address = {
           addressee:name,

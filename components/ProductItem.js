@@ -1,23 +1,13 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
 import AddToCart from "./AddToCart";
 
 const ProductItem = ({ item }) => {
-  console.log(typeof(item))
-  console.log(item)
-  const [addedToCart, setAddedToCart] = useState(false);
-  const dispatch = useDispatch();
+
+
   const navigation = useNavigation();
-  const addItemToCart = (item) => {
-    setAddedToCart(true);
-    dispatch(addToCart(item));
-    setTimeout(() => {
-      setAddedToCart(false);
-    }, 60000);
-  };
+
   return (
     <Pressable 
       style={{ marginHorizontal: 25, marginVertical: 25 }}
@@ -27,26 +17,24 @@ const ProductItem = ({ item }) => {
         )}
     >
       <Image
-        style={{ width: 150, height: 150, resizeMode: "contain" }}
+        style={{ width: 150, height: 100, resizeMode: "contain" }}
         source={{ uri: item?.image }}
       />
-
-      <Text numberOfLines={2} style={{ width: 150, marginTop: 10 }}>
-        {item?.title}
+      
+      <Text numberOfLines={2} style={{textAlignVertical:'bottom', textAlign:'center', height:40, width: 150, marginTop: 5 }}>
+        {item?.name}
       </Text>
-
       <View
         style={{
           marginTop: 5,
           flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
+          alignSelf: "center",
         }}
       >
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>Rs.{item?.price}</Text>
-        <Text style={{ color: "#FFC72C", fontWeight: "bold" }}>
+        {/* <Text style={{ color: "#FFC72C", fontWeight: "bold" }}>
         ⭐ {item?.rating?.rate} /5
-        </Text>
+        </Text> */}
       </View>
       <AddToCart item={item} />
     </Pressable>

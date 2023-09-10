@@ -8,17 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { cleanCart } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
 import RazorpayCheckout from "react-native-razorpay";
+import { Button } from "@rneui/themed";
+import GoBack from "../components/GoBack";
 
 const ConfirmationScreen = () => {
   const steps = [
     { title: "Address", content: "Address Form" },
-    { title: "Delivery", content: "Delivery Options" },
+    // { title: "Delivery", content: "Delivery Options" },
     { title: "Payment", content: "Payment Details" },
     { title: "Place Order", content: "Order Summary" },
   ];
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState(0);
-  const [addresses, setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState(["H.No.160"]);
   const { userId, setUserId } = useContext(UserType);
   const cart = useSelector((state) => state.cart.cart);
   const total = cart
@@ -36,7 +38,7 @@ const ConfirmationScreen = () => {
 
       setAddresses(addresses);
     } catch (error) {
-      console.log("error", error);
+      console.log("Error fetching ADDRESS ", error);
     }
   };
   const dispatch = useDispatch();
@@ -72,13 +74,13 @@ const ConfirmationScreen = () => {
     try {
       const options = {
         description: "Adding To Wallet",
-        currency: "INR",
+        currency: "PKR",
         name: "Amazon",
         key: "rzp_test_E3GWYimxN7YMk8",
         amount: total * 100,
         prefill: {
           email: "void@razorpay.com",
-          contact: "9191919191",
+          phone: "+9191919191",
           name: "RazorPay Software",
         },
         theme: { color: "#F37254" },
@@ -113,17 +115,10 @@ const ConfirmationScreen = () => {
   };
   return (
     <ScrollView style={{ marginTop: 55 }}>
-      <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 20,
-            justifyContent: "space-between",
-          }}
-        >
+      <View style={styles.stepContainer}>
+        <View style={styles.stepItem}>
           {steps?.map((step, index) => (
-            <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
               {index > 0 && (
                 <View
                   style={[
@@ -134,14 +129,7 @@ const ConfirmationScreen = () => {
               )}
               <View
                 style={[
-                  {
-                    width: 30,
-                    height: 30,
-                    borderRadius: 15,
-                    backgroundColor: "#ccc",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
+                  styles.stepDot,
                   index < currentStep && { backgroundColor: "green" },
                 ]}
               >
@@ -176,25 +164,16 @@ const ConfirmationScreen = () => {
           <Pressable>
             {addresses?.map((item, index) => (
               <Pressable
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#D0D0D0",
-                  padding: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 5,
-                  paddingBottom: 17,
-                  marginVertical: 7,
-                  borderRadius: 6,
-                }}
+                key={index}
+                style={styles.addressItem}
               >
                 {selectedAddress && selectedAddress._id === item?._id ? (
-                  <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+                  <FontAwesome5 name="dot-circle" size={40} color="#008397" />
                 ) : (
                   <Entypo
                     onPress={() => setSelectedAdress(item)}
                     name="circle"
-                    size={20}
+                    size={40}
                     color="gray"
                   />
                 )}
@@ -222,7 +201,7 @@ const ConfirmationScreen = () => {
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    India, Bangalore
+                    Pakistan, Punjab
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
@@ -241,40 +220,19 @@ const ConfirmationScreen = () => {
                     }}
                   >
                     <Pressable
-                      style={{
-                        backgroundColor: "#F5F5F5",
-                        paddingHorizontal: 10,
-                        paddingVertical: 6,
-                        borderRadius: 5,
-                        borderWidth: 0.9,
-                        borderColor: "#D0D0D0",
-                      }}
+                      style={styles.addressAction}
                     >
                       <Text>Edit</Text>
                     </Pressable>
 
                     <Pressable
-                      style={{
-                        backgroundColor: "#F5F5F5",
-                        paddingHorizontal: 10,
-                        paddingVertical: 6,
-                        borderRadius: 5,
-                        borderWidth: 0.9,
-                        borderColor: "#D0D0D0",
-                      }}
+                      style={styles.addressAction}
                     >
                       <Text>Remove</Text>
                     </Pressable>
 
                     <Pressable
-                      style={{
-                        backgroundColor: "#F5F5F5",
-                        paddingHorizontal: 10,
-                        paddingVertical: 6,
-                        borderRadius: 5,
-                        borderWidth: 0.9,
-                        borderColor: "#D0D0D0",
-                      }}
+                      style={styles.addressAction}
                     >
                       <Text>Set as Default</Text>
                     </Pressable>
@@ -284,14 +242,7 @@ const ConfirmationScreen = () => {
                     {selectedAddress && selectedAddress._id === item?._id && (
                       <Pressable
                         onPress={() => setCurrentStep(1)}
-                        style={{
-                          backgroundColor: "#008397",
-                          padding: 10,
-                          borderRadius: 20,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginTop: 10,
-                        }}
+                        style={styles.addressButton}
                       >
                         <Text style={{ textAlign: "center", color: "white" }}>
                           Deliver to this Address
@@ -303,10 +254,18 @@ const ConfirmationScreen = () => {
               </Pressable>
             ))}
           </Pressable>
+          
+          <Button 
+            onPress={() => navigation.goBack()}
+            title={'Return to cart'}
+          
+          >
+          </Button>
+
         </View>
       )}
 
-      {currentStep == 1 && (
+      {/* {currentStep == 1 && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
             Choose your delivery options
@@ -357,109 +316,70 @@ const ConfirmationScreen = () => {
             <Text>Continue</Text>
           </Pressable>
         </View>
-      )}
+      )} */}
 
-      {currentStep == 2 && (
+      {currentStep == 1 && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
             Select your payment Method
           </Text>
 
-          <View
-            style={{
-              backgroundColor: "white",
-              padding: 8,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 7,
-              marginTop: 12,
-            }}
+          <Pressable
+            style={styles.paymentOption}
+            onPress={() => setSelectedOption("cash")}
           >
             {selectedOption === "cash" ? (
-              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+              <FontAwesome5 name="dot-circle" size={30} color="#008397" />
             ) : (
               <Entypo
-                onPress={() => setSelectedOption("cash")}
                 name="circle"
-                size={20}
+                size={30}
                 color="gray"
               />
             )}
 
             <Text>Cash on Delivery</Text>
-          </View>
+          </Pressable>
 
-          <View
-            style={{
-              backgroundColor: "white",
-              padding: 8,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 7,
-              marginTop: 12,
+          <Pressable
+            style={styles.paymentOption}
+            onPress={() => {
+              setSelectedOption("card");
+              Alert.alert("Jazz Cash/Easy Paisa", "Pay Online", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel is pressed"),
+                },
+                {
+                  text: "OK",
+                  onPress: () => pay(),
+                },
+              ]);
             }}
           >
             {selectedOption === "card" ? (
-              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
+              <FontAwesome5 name="dot-circle" size={30} color="#008397" />
             ) : (
-              <Entypo
-                onPress={() => {
-                  setSelectedOption("card");
-                  Alert.alert("UPI/Debit card", "Pay Online", [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel is pressed"),
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => pay(),
-                    },
-                  ]);
-                }}
-                name="circle"
-                size={20}
-                color="gray"
-              />
+              <Entypo name="circle" size={30} color="gray" />
             )}
 
             <Text>UPI / Credit or debit card</Text>
-          </View>
+          </Pressable>
           <Pressable
-            onPress={() => setCurrentStep(3)}
-            style={{
-              backgroundColor: "#FFC72C",
-              padding: 10,
-              borderRadius: 20,
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 15,
-            }}
+            onPress={() => setCurrentStep(2)}
+            style={styles.continueButton}
           >
             <Text>Continue</Text>
           </Pressable>
         </View>
       )}
 
-      {currentStep === 3 && selectedOption === "cash" && (
+      {currentStep === 2 && selectedOption === "cash" && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>Order Now</Text>
 
           <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 8,
-              backgroundColor: "white",
-              padding: 8,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-            }}
+            style={styles.deliveryOption}
           >
             <View>
               <Text style={{ fontSize: 17, fontWeight: "bold" }}>
@@ -556,14 +476,7 @@ const ConfirmationScreen = () => {
 
           <Pressable
             onPress={handlePlaceOrder}
-            style={{
-              backgroundColor: "#FFC72C",
-              padding: 10,
-              borderRadius: 20,
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 20,
-            }}
+            style={styles.continueButton}
           >
             <Text>Place your order</Text>
           </Pressable>
@@ -575,4 +488,197 @@ const ConfirmationScreen = () => {
 
 export default ConfirmationScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 55,
+  },
+  stepContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 40,
+  },
+  stepItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    justifyContent: 'space-between',
+  },
+  stepLine: {
+    flex: 1,
+    height: 2,
+    backgroundColor: 'green',
+  },
+  stepDot: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepDotActive: {
+    backgroundColor: 'green',
+  },
+  stepText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  deliveryAddress: {
+    marginHorizontal: 20,
+  },
+  addressTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  addressItem: {
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingBottom: 17,
+    marginVertical: 7,
+    borderRadius: 6,
+  },
+  addressDot: {
+    backgroundColor: '#008397',
+  },
+  addressDotInactive: {
+    color: 'gray',
+  },
+  addressName: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  addressLocation: {
+    fontSize: 15,
+    color: '#181818',
+  },
+  addressActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 7,
+  },
+  addressAction: {
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 5,
+    borderWidth: 0.9,
+    borderColor: '#D0D0D0',
+  },
+  addressButton: {
+    backgroundColor: '#008397',
+    padding: 10,
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  deliveryOptions: {
+    marginHorizontal: 20,
+  },
+  deliveryTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  deliveryOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 8,
+    gap: 7,
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  deliveryOptionText: {
+    flex: 1,
+  },
+  continueButton: {
+    backgroundColor: '#FFC72C',
+    padding: 10,
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  paymentMethod: {
+    marginHorizontal: 20,
+  },
+  paymentTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  paymentOption: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    marginTop: 12,
+  },
+  paymentOptionText: {
+    flex: 1,
+  },
+  orderNow: {
+    marginHorizontal: 20,
+  },
+  orderTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  orderInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+    backgroundColor: 'white',
+    padding: 8,
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  orderSave: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  orderTotal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  orderTotalAmount: {
+    color: '#C60C30',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  payWith: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  paymentText: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  paymentMethodText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 7,
+  },
+  placeOrderButton: {
+    backgroundColor: '#FFC72C',
+    padding: 10,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+});

@@ -42,13 +42,12 @@ const LoginScreen = () => {
       phone: phone,
       password: password,
     };
-    console.log('Phone number is', phone)
     axios
       .post("http://localhost:8000/token/", user)
       .then((response) => {
         console.log(response.data);
         const accessToken = response.data.access;
-        const refreshToken = response.data.access;
+        const refreshToken = response.data.refresh;
         AsyncStorage.setItem("authToken", accessToken);
         AsyncStorage.setItem("refreshToken", refreshToken);
         navigation.replace("Main");
@@ -58,6 +57,7 @@ const LoginScreen = () => {
         console.log(error);
       });
   };
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={{margin:50}}>

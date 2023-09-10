@@ -2,34 +2,14 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  Platform,
-  ScrollView,
-  Pressable,
-  TextInput,
-  Image,
 } from "react-native";
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import React, { useState, useEffect, useCallback } from "react";
 import { SliderBox } from "react-native-image-slider-box";
 import axios from "axios";
-import ProductItem from "../components/ProductItem";
-import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { BottomModal, SlideAnimation, ModalContent } from "react-native-modals";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserType } from "../UserContext";
-import jwt_decode from "jwt-decode";
-import CartIcon from "../components/CartBadge";
-import FilterView from "../components/FilterView";
-import CartBadge from "../components/CartBadge";
 import SearchBarCustom from "../components/SearchBar";
-
+import ProductList from "../components/ProductList";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -39,176 +19,7 @@ const HomeScreen = () => {
     "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x550_3.gif",
     "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Books/BB/JULY/1242x550_Header-BB-Jul23.jpg",
   ];
-  const deals = [
-    {
-      id: "20",
-      title: "OnePlus Nord CE 3 Lite 5G (Pastel Lime, 8GB RAM, 128GB Storage)",
-      oldPrice: 25000,
-      price: 19000,
-      images:
-      [
-        "https://images-eu.ssl-images-amazon.com/images/G/31/wireless_products/ssserene/weblab_wf/xcm_banners_2022_in_bau_wireless_dec_580x800_once3l_v2_580x800_in-en.jpg",
-        "https://m.media-amazon.com/images/I/61QRgOgBx0L._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61uaJPLIdML._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/510YZx4v3wL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61J6s1tkwpL._SX679_.jpg",
-      ],
-      color: "Stellar Green",
-      size: "6 GB RAM 128GB Storage",
-    },
-    {
-      id: "30",
-      title:
-        "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage) with No Cost EMI & Additional Exchange Offers",
-      oldPrice: 74000,
-      price: 26000,
-      images:
-      [
-        "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/SamsungBAU/S20FE/GW/June23/BAU-27thJune/xcm_banners_2022_in_bau_wireless_dec_s20fe-rv51_580x800_in-en.jpg",
-        "https://m.media-amazon.com/images/I/81vDZyJQ-4L._SY879_.jpg",
-        "https://m.media-amazon.com/images/I/61vN1isnThL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71yzyH-ohgL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61vN1isnThL._SX679_.jpg",
-      ],
-      color: "Cloud Navy",
-      size: "8 GB RAM 128GB Storage",
-    },
-    {
-      id: "40",
-      title:
-        "Samsung Galaxy M14 5G (ICY Silver, 4GB, 128GB Storage) | 50MP Triple Cam | 6000 mAh Battery | 5nm Octa-Core Processor | Android 13 | Without Charger",
-      oldPrice: 16000,
-      price: 14000,
-      images:
-      [
-        "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Wireless/Samsung/CatPage/Tiles/June/xcm_banners_m14_5g_rv1_580x800_in-en.jpg",
-        "https://m.media-amazon.com/images/I/817WWpaFo1L._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/81KkF-GngHL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61IrdBaOhbL._SX679_.jpg",
-      ],
-      color: "Icy Silver",
-      size: "6 GB RAM 64GB Storage",
-    },
-    {
-      id: "50",
-      title:
-        "realme narzo N55 (Prime Blue, 4GB+64GB) 33W Segment Fastest Charging | Super High-res 64MP Primary AI Camera",
-      oldPrice: 12999,
-      price: 10999,
-      images:
-      [
-        "https://images-eu.ssl-images-amazon.com/images/G/31/tiyesum/N55/June/xcm_banners_2022_in_bau_wireless_dec_580x800_v1-n55-marchv2-mayv3-v4_580x800_in-en.jpg",
-        "https://m.media-amazon.com/images/I/41Iyj5moShL._SX300_SY300_QL70_FMwebp_.jpg",
-        "https://m.media-amazon.com/images/I/61og60CnGlL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61twx1OjYdL._SX679_.jpg",
-      ],
-    },
-  ];
-  const offers = [
-    {
-      id: "0",
-      title:
-        "Oppo Enco Air3 Pro True Wireless in Ear Earbuds with Industry First Composite Bamboo Fiber, 49dB ANC, 30H Playtime, 47ms Ultra Low Latency,Fast Charge,BT 5.3 (Green)",
-      offer: "72% off",
-      oldPrice: 7500,
-      price: 4500,
-      image:
-        "https://m.media-amazon.com/images/I/61a2y1FCAJL._AC_UL640_FMwebp_QL65_.jpg",
-      carouselImages: [
-        "https://m.media-amazon.com/images/I/61a2y1FCAJL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71DOcYgHWFL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71LhLZGHrlL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/61Rgefy4ndL._SX679_.jpg",
-      ],
-      color: "Green",
-      size: "Normal",
-    },
-    {
-      id: "1",
-      title:
-        "Fastrack Limitless FS1 Pro Smart Watch|1.96 Super AMOLED Arched Display with 410x502 Pixel Resolution|SingleSync BT Calling|NitroFast Charging|110+ Sports Modes|200+ Watchfaces|Upto 7 Days Battery",
-      offer: "40%",
-      oldPrice: 7955,
-      price: 3495,
-      image: "https://m.media-amazon.com/images/I/41mQKmbkVWL._AC_SY400_.jpg",
-      carouselImages: [
-        "https://m.media-amazon.com/images/I/71h2K2OQSIL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71BlkyWYupL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71c1tSIZxhL._SX679_.jpg",
-      ],
-      color: "black",
-      size: "Normal",
-    },
-    {
-      id: "2",
-      title: "Aishwariya System On Ear Wireless On Ear Bluetooth Headphones",
-      offer: "40%",
-      oldPrice: 7955,
-      price: 3495,
-      image: "https://m.media-amazon.com/images/I/41t7Wa+kxPL._AC_SY400_.jpg",
-      carouselImages: ["https://m.media-amazon.com/images/I/41t7Wa+kxPL.jpg"],
-      color: "black",
-      size: "Normal",
-    },
-    {
-      id: "3",
-      title:
-        "Fastrack Limitless FS1 Pro Smart Watch|1.96 Super AMOLED Arched Display with 410x502 Pixel Resolution|SingleSync BT Calling|NitroFast Charging|110+ Sports Modes|200+ Watchfaces|Upto 7 Days Battery",
-      offer: "40%",
-      oldPrice: 24999,
-      price: 19999,
-      image: "https://m.media-amazon.com/images/I/71k3gOik46L._AC_SY400_.jpg",
-      carouselImages: [
-        "https://m.media-amazon.com/images/I/41bLD50sZSL._SX300_SY300_QL70_FMwebp_.jpg",
-        "https://m.media-amazon.com/images/I/616pTr2KJEL._SX679_.jpg",
-        "https://m.media-amazon.com/images/I/71wSGO0CwQL._SX679_.jpg",
-      ],
-      color: "Norway Blue",
-      size: "8GB RAM, 128GB Storage",
-    },
-  ];
-  // const [items, setItems] = useState([
-  //   { label: "Men's clothing", value: "men's clothing" },
-  //   { label: "Jewelery", value: "jewelery" },
-  //   { label: "Electronics", value: "electronics" },
-  //   { label: "Women's clothing", value: "women's clothing" },
-  // ]);
-  const [items, setItems] = useState([
-    { label: "Men's clothing", value: "men's clothing" },
-    { label: "Jewelery", value: "jewelery" },
-    { label: "Electronics", value: "electronics" },
-    { label: "Women's clothing", value: "women's clothing" },
-  ]);
-  const categories = [
-    {
-      name: "men's clothing",
-      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
-    },
-    {
-      name: "jewelery",
-      icon:  "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
-    },
-    {
-      name: "Electronics",
-      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
-    },
-    {
-      name: "Women's clothing",
-      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
-    },
-    {
-      name: "clothing",
-      icon: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg", // Replace with the actual URI of the icon image
-    },
-    // Add more categories with their respective icon URIs as needed
-  ];
-  
-
   const [products, setProducts] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [category, setCategory] = useState();
-  const { userId, setUserId } = useContext(UserType);
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -228,21 +39,12 @@ const HomeScreen = () => {
   }, []);
 
   const cart = useSelector((state) => state.cart.cart);
-  
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = await AsyncStorage.getItem("authToken");
-      const decodedToken = jwt_decode(token);
-      const userId = decodedToken.userId;
-      setUserId(userId);
-    };
-    fetchUser();
-  }, []);
 
   return (
-    <>
+    <View style={{flex:1}}>
         <SearchBarCustom />
-        <ScrollView>
+        <View style={{flex:1, flexShrink:1, minHeight:200}}>
+        
           {/* SLIDER BOX */}
           <SliderBox
             images={imagesSlider}
@@ -254,6 +56,7 @@ const HomeScreen = () => {
           />
 
           {/* OFFERS BOX  */}
+        {/* <ScrollView>
           <Text style={stylesOffer.heading}>
             Trending Deals of the week
           </Text>
@@ -277,7 +80,7 @@ const HomeScreen = () => {
             ))}
           </View>
           
-          {/* BORDER */}
+
           <Text
             style={{
               height: 1,
@@ -287,8 +90,19 @@ const HomeScreen = () => {
             }}
           />
 
-        </ScrollView>
-    </>
+        </ScrollView> */}
+          <Text
+            style={{
+              height: 1,
+              borderColor: "#D0D0D0",
+              borderWidth: 5,
+            }}
+          />
+        </View>
+        <View style={{flex:0, flexGrow:1, padding:5, marginTop:5,marginBottom:240}}>
+          <ProductList />
+        </View>
+    </View>
   );
 };
 
@@ -311,8 +125,8 @@ const stylesOffer = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 200,
+    height: 200,
     resizeMode: "contain",
   },
 });
