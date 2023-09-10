@@ -3,211 +3,160 @@ import {
   Text,
   View,
   ScrollView,
-  TextInput,
   Pressable,
-  Alert,
+  TextInput,
 } from "react-native";
-import React, { useEffect, useState,useContext } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwt_decode from "jwt-decode"
+import React, { useEffect, useContext, useState, useCallback } from "react";
+import { Feather, AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import API from "../axios/AxiosConfig";
 import { UserType } from "../UserContext";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
+import SearchBarCustom from "../components/SearchBar";
 
 const AddressScreen = () => {
-    const navigation = useNavigation();
-  const [name, setName] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
-  const [houseNo, setHouseNo] = useState("");
-  const [street, setStreet] = useState("");
-  const [landmark, setLandmark] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const {userId,setUserId} = useContext(UserType)
+  const navigation = useNavigation();
+  const [addresses, setAddresses] = useState([]);
+  const { userId, setUserId } = useContext(UserType);
+  console.log('USER ID in ADDRESS Screen', userId)
   useEffect(() => {
-    const fetchUser = async() => {
-        const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwt_decode(token);
-        const userId = decodedToken.userId;
-        setUserId(userId)
+    fetchAddresses();
+  }, []);
+  const fetchAddresses = async () => {
+    try {
+      const response = await API.get(
+        "/address/"
+      );
+      const addresses = response.data;
+        console.log(response.data)
+      setAddresses(addresses);
+    } catch (error) {
+      console.log("error", error);
     }
+  };
+  //refresh the addresses when the component comes to the focus ie basically when we navigate back
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddresses();
+    }, [])
+  );
 
-    fetchUser();
-  },[]);
-  console.log(userId)
-  const handleAddAddress = () => {
-      const address = {
-          name,
-          mobileNo,
-          houseNo,
-          street,
-          landmark,
-          postalCode
-      }
-
-      axios.post("http://localhost:8000/addresses",{userId,address}).then((response) => {
-          Alert.alert("Success","Addresses added successfully");
-          setName("");
-          setMobileNo("");
-          setHouseNo("");
-          setStreet("");
-          setLandmark("");
-          setPostalCode("");
-
-          setTimeout(() => {
-            navigation.goBack();
-          },500)
-      }).catch((error) => {
-          Alert.alert("Error","Failed to add address")
-          console.log("error",error)
-      })
-  }
   return (
-    <ScrollView style={{ marginTop: 50 }}>
-      <View style={{ height: 50, backgroundColor: "#00CED1" }} />
-
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontSize: 17, fontWeight: "bold" }}>
-          Add a new Address
-        </Text>
-
-        <TextInput
-          placeholderTextColor={"black"}
-          placeholder="India"
-          style={{
-            padding: 10,
-            borderColor: "#D0D0D0",
-            borderWidth: 1,
-            marginTop: 10,
-            borderRadius: 5,
-          }}
-        />
-
-        <View style={{ marginVertical: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Full name (First and last name)
-          </Text>
-
-          <TextInput
-            value={name}
-            onChangeText={(text) => setName(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder="enter your name"
-          />
-        </View>
-
-        <View>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Mobile numebr
-          </Text>
-
-          <TextInput
-            value={mobileNo}
-            onChangeText={(text) => setMobileNo(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder="Mobile No"
-          />
-        </View>
-
-        <View style={{ marginVertical: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Flat,House No,Building,Company
-          </Text>
-
-          <TextInput
-            value={houseNo}
-            onChangeText={(text) => setHouseNo(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder=""
-          />
-        </View>
-
-        <View>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            Area,Street,sector,village
-          </Text>
-          <TextInput
-            value={street}
-            onChangeText={(text) => setStreet(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder=""
-          />
-        </View>
-
-        <View style={{ marginVertical: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Landmark</Text>
-          <TextInput
-            value={landmark}
-            onChangeText={(text) => setLandmark(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder="Eg near appollo hospital"
-          />
-        </View>
-
-        <View>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>Pincode</Text>
-
-          <TextInput
-            value={postalCode}
-            onChangeText={(text) => setPostalCode(text)}
-            placeholderTextColor={"black"}
-            style={{
-              padding: 10,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-              borderRadius: 5,
-            }}
-            placeholder="Enter Pincode"
-          />
-        </View>
+    <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
+      <View style={{ paddingHorizontal: 10 }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Your Addresses</Text>
 
         <Pressable
-        onPress={handleAddAddress}
+          onPress={() => navigation.navigate("New")}
           style={{
-            backgroundColor: "#FFC72C",
-            padding: 19,
-            borderRadius: 6,
-            justifyContent: "center",
+            flexDirection: "row",
             alignItems: "center",
-            marginTop: 20,
+            justifyContent: "space-between",
+            marginTop: 10,
+            borderColor: "#D0D0D0",
+            borderWidth: 1,
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+            paddingVertical: 10,
+            paddingHorizontal: 5,
           }}
         >
-          <Text style={{ fontWeight: "bold" }}>Add Address</Text>
+          <Text>Add a new Address</Text>
+          <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+        </Pressable>
+
+        <Pressable>
+          {/* all the added adresses */}
+          {addresses?.map((item, index) => (
+            <Pressable
+              style={{
+                borderWidth: 1,
+                borderColor: "#D0D0D0",
+                padding: 10,
+                flexDirection: "column",
+                gap: 5,
+                marginVertical: 10,
+              }}
+            >
+              <View
+                key={item?.id}
+                style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
+              >
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  {item?.name}
+                </Text>
+                <Entypo name="location-pin" size={24} color="red" />
+              </View>
+
+              <Text style={{ fontSize: 15, color: "#181818" }}>
+                House No. {item?.house_no},
+              </Text>
+
+              <Text style={{ fontSize: 15, color: "#181818" }}>
+                Street No. {item?.street}
+              </Text>
+
+              <Text style={{ fontSize: 15, color: "#181818" }}>
+                {item?.city}, {item?.province}
+              </Text>
+
+              <Text style={{ fontSize: 15, color: "#181818" }}>
+                phone No : {item?.user}
+              </Text>
+              <Text style={{ fontSize: 15, color: "#181818" }}>
+                Postal code : {item?.postal_code}
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  marginTop: 7,
+                }}
+              >
+                <Pressable
+                  style={{
+                    backgroundColor: "#F5F5F5",
+                    paddingHorizontal: 10,
+                    paddingVertical: 6,
+                    borderRadius: 5,
+                    borderWidth: 0.9,
+                    borderColor: "#D0D0D0",
+                  }}
+                >
+                  <Text>Edit</Text>
+                </Pressable>
+
+                <Pressable
+                  style={{
+                    backgroundColor: "#F5F5F5",
+                    paddingHorizontal: 10,
+                    paddingVertical: 6,
+                    borderRadius: 5,
+                    borderWidth: 0.9,
+                    borderColor: "#D0D0D0",
+                  }}
+                >
+                  <Text>Remove</Text>
+                </Pressable>
+
+                <Pressable
+                  style={{
+                    backgroundColor: "#F5F5F5",
+                    paddingHorizontal: 10,
+                    paddingVertical: 6,
+                    borderRadius: 5,
+                    borderWidth: 0.9,
+                    borderColor: "#D0D0D0",
+                  }}
+                >
+                  <Text>Set as Default</Text>
+                </Pressable>
+              </View>
+            </Pressable>
+          ))}
         </Pressable>
       </View>
     </ScrollView>
