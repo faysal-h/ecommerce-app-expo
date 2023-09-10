@@ -10,14 +10,16 @@ import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ProductInfoScreen from "../screens/ProductInfoScreen";
-import AddAddressScreen from "../screens/AddAddressScreen";
+// import AddAddressScreen from "../screens/AddAddressScreen";
 import AddressScreen from "../screens/AddressScreen";
 import CartScreen from "../screens/CartScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ConfirmationScreen from "../screens/ConfirmationScreen";
 import OrderScreen from "../screens/OrderScreen";
 import CartBadge from "../components/CartBadge";
-import ProductsScreen from "../screens/ProductsScreen";
+import CategoryScreen from "../screens/CategoryScreen";
+import ProductListScreen from "../screens/ProductListScreen";
+
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -42,10 +44,10 @@ const StackNavigator = () => {
         />
 
         <Tab.Screen
-          name="Products"
-          component={ProductsScreen}
+          name="Category"
+          component={CategoryScreen}
           options={{
-            tabBarLabel: "Products",
+            tabBarLabel: "Category",
             tabBarLabelStyle: { color: "#008E97" },
             headerShown: false,
             tabBarIcon: ({ focused }) =>
@@ -117,7 +119,7 @@ const StackNavigator = () => {
         />
         <Stack.Screen
           name="Products"
-          component={ProductsScreen}
+          component={ProductListScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -125,11 +127,11 @@ const StackNavigator = () => {
           component={ProductInfoScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Address"
           component={AddAddressScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
           name="Add"
           component={AddressScreen}
