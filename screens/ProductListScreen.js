@@ -7,6 +7,9 @@ const ProductListScreen = ({route}) => {
     useState
  return(
     <View>
+        <View style={{flexGrow:1}}>
+            <SearchBarCustom />
+        </View>
         <View style={{flexDirection:'row',
                     backgroundColor:'#008E97',
                     alignItems:'center',
@@ -14,14 +17,11 @@ const ProductListScreen = ({route}) => {
             <View style={{paddingLeft:15,flexGrow:0}}>
                 <GoBack />
             </View>
-            <View style={{flexGrow:1}}>
-                <SearchBarCustom />
+            <View style={{flexDirection:'row',justifyContent:'center',flexGrow:1}}>
+                <Text style={{margin:10,fontSize:26,fontWeight:'bold', color:'black'}}>
+                    {route?.params?.category}
+                </Text>
             </View>
-        </View>
-        <View style={{flexDirection:'row', justifyContent:'center',borderWidth:5,borderColor:'#008E97'}}>
-            <Text style={{margin:10,fontSize:26,fontWeight:'400', color:'#665200', textAlignVertical:'bottom'}}>
-                {route?.params?.category}
-            </Text>
         </View>
         <View style={{padding:5,marginBottom:240}}>
             <ProductList route={route} />

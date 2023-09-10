@@ -23,11 +23,13 @@ const CategoryScreen = () => {
       navigation.navigate('Products', { category: selectedCategory });
       };
     return(
-        <View>
+        <View style={{flexDirection:'column', flexGrow:1}}>
           <SearchBarCustom />
+          <View style={{backgroundColor:'lightgray', borderColor:'gray', borderWidth:3, alignItems:'center'}}>
 
-          {/* CATGORY AREA */}
           <Text style={styles.title}>Categories</Text>
+          </View>
+          {/* CATGORY AREA */}
           <View style={styles.container}>
             <View style={styles.buttonContainer}>
             {categories.map((item) => (
@@ -61,32 +63,30 @@ const CategoryScreen = () => {
               ))}
             </View>
           </View>
-
-          {/* PRODUCT AREA */}
-          {/* <View style={{flex:1, backgroundColor:'white',flexGrow:1,marginHorizontal:10}}>
-            <ProductList />
-          </View> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex:1,
+      // flex:1,
+      flexGrow:1,
       padding: 10,
-      backgroundColor: '#f1f4e9',
-      // backgroundColor: 'lightgray',
+      justifyContent:'center',
+      // backgroundColor: '#f1f4e9',
+      backgroundColor: 'lightgray',
     },
     title: {
-      margin:20,
+      margin:10,
+      verticalAlign:'middle',
+
       flexDirection:'row',
-      fontSize: 30,
-      color:'green',
+      fontSize: 26,
+      color:'#008E97',
       fontWeight: 'bold',
       marginBottom: 10,
     },
     buttonContainer: {
-
       borderRadius:10,
       borderColor:'red',
       gap:50,
