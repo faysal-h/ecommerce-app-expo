@@ -59,7 +59,7 @@ const CartScreen = () => {
                 <Text numberOfLines={3} style={styles.itemTitle}>
                   {item?.title}
                 </Text>
-                <Text style={styles.itemPrice}>{item?.price}</Text>
+                <Text style={styles.itemPrice}>{item?.price.toFixed(2)}</Text>
                 {/* <Image
                 style={styles.stockImage}
                 source={{
@@ -133,15 +133,14 @@ const CartScreen = () => {
       <View style={styles.subTotal}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal: </Text>
-          <Text style={{ fontSize: 20, fontWeight: "bold", width: 80 }}>{total.toFixed(2)}</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total.toFixed(2)}</Text>
         </View>
         <Button
           title={`Check Out`}
-          onPress={() => navigation.navigate("Confirm")}
-
+          onPress={() => cart.length ? navigation.navigate("Confirm"):console.log("Cart is Empty")}
           color={'#FFC72C'}
         >
-          <Text style={{ fontSize: 18 }}>Buy ({cart.length}) items</Text>
+          <Text style={{ fontSize: 18 }}>{cart.length?`Buy (${cart.length}) items`:"Cart is Empty"}</Text>
         </Button>
       </View>
     </View>

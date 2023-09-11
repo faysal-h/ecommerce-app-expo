@@ -13,7 +13,7 @@ const SearchBarCustom = () => {
             size={22}
             color="black"
           />
-          <TextInput placeholder="Search Store" />
+          <TextInput placeholder="Search Store" style={{flexGrow:1}} />
         </Pressable>
         {/* Cart Icon on Top Bar */}
         <Pressable>
@@ -27,13 +27,14 @@ const SearchBarCustom = () => {
 
 const styles = StyleSheet.create({
     view: {
-      backgroundColor: "#00CED1",
+      backgroundColor: "#008E97",
       padding: 10,
       flexDirection: "row",
       alignItems: "center",
     },
     pressable: {
       flexDirection: "row",
+      justifyContent:'space-between',
       alignItems: "center",
       marginHorizontal: 7,
       gap: 10,

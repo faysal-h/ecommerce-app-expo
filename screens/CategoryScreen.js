@@ -25,7 +25,7 @@ const CategoryScreen = () => {
     return(
         <View style={{flexDirection:'column', flexGrow:1}}>
           <SearchBarCustom />
-          <View style={{backgroundColor:'lightgray', borderColor:'gray', borderWidth:3, alignItems:'center'}}>
+          <View style={{backgroundColor:'lightgray', borderBottomColor:'darkgray', borderWidth:2, alignItems:'center'}}>
 
           <Text style={styles.title}>Categories</Text>
           </View>
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     title: {
       margin:10,
       verticalAlign:'middle',
-
       flexDirection:'row',
       fontSize: 26,
       color:'#008E97',
