@@ -15,7 +15,6 @@ import API from "../axios/AxiosConfig";
 
 const ProfileScreen = () => {
   const { userId, setUserId } = useContext(UserType);
-  console.log('USER ID from context is ',userId)
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
@@ -78,20 +77,19 @@ const ProfileScreen = () => {
             <Text style={styles.buttonText}>Your orders</Text>
           </Pressable>
 
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Your Account</Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Buy Again</Text>
-          </Pressable>
-
           <Pressable onPress={logout} style={styles.button}>
             <Text style={styles.buttonText}>Logout</Text>
           </Pressable>
         </View>
+
+        {/* <View style={styles.buttonContainer}>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Your Account</Text>
+          </Pressable>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Buy Again</Text>
+          </Pressable>
+        </View> */}
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {loading ? (

@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import RazorpayCheckout from "react-native-razorpay";
 import { Button } from "@rneui/themed";
 import GoBack from "../components/GoBack";
+import API from "../axios/AxiosConfig";
 
 const ConfirmationScreen = () => {
   const steps = [
@@ -31,14 +32,13 @@ const ConfirmationScreen = () => {
   }, []);
   const fetchAddresses = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8000/addresses/${userId}`
+      const response = await API.get(
+        `/address/`
       );
-      const { addresses } = response.data;
-
+      const addresses = response.data;
       setAddresses(addresses);
     } catch (error) {
-      console.log("Error fetching ADDRESS ", error);
+      console.log("Error fetching ADDRESS in Order Confirmation", error);
     }
   };
   const dispatch = useDispatch();
@@ -55,8 +55,8 @@ const ConfirmationScreen = () => {
         paymentMethod: selectedOption,
       };
 
-      const response = await axios.post(
-        "http://localhost:8000/orders",
+      const response = await API.post(
+        "/orders",
         orderData
       );
       if (response.status === 200) {
@@ -98,8 +98,8 @@ const ConfirmationScreen = () => {
         paymentMethod: "card",
       };
 
-      const response = await axios.post(
-        "http://localhost:8000/orders",
+      const response = await API.post(
+        "/orders/",
         orderData
       );
       if (response.status === 200) {
@@ -167,7 +167,7 @@ const ConfirmationScreen = () => {
                 key={index}
                 style={styles.addressItem}
               >
-                {selectedAddress && selectedAddress._id === item?._id ? (
+                {selectedAddress && selectedAddress.id === item?.id ? (
                   <FontAwesome5 name="dot-circle" size={40} color="#008397" />
                 ) : (
                   <Entypo
@@ -187,28 +187,28 @@ const ConfirmationScreen = () => {
                     }}
                   >
                     <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-                      {item?.name}
+                      {item?.addressee}
                     </Text>
                     <Entypo name="location-pin" size={24} color="red" />
                   </View>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    {item?.houseNo}, {item?.landmark}
+                    House No. {item?.house_no}, Street No. {item?.street}
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    {item?.street}
+                    {item?.city}
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    Pakistan, Punjab
+                    {item?.province}, {item?.country}
                   </Text>
 
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    phone No : {item?.mobileNo}
+                    phone No : {item?.addressee_phone}
                   </Text>
                   <Text style={{ fontSize: 15, color: "#181818" }}>
-                    pin code : {item?.postalCode}
+                    Postal code : {item?.postal_code}
                   </Text>
 
                   <View
@@ -254,13 +254,14 @@ const ConfirmationScreen = () => {
               </Pressable>
             ))}
           </Pressable>
-          
-          <Button 
-            onPress={() => navigation.goBack()}
-            title={'Return to cart'}
-          
-          >
-          </Button>
+          <View style={{flexDirection:'column',alignContent:'center',alignSelf:'center',width:150}}>
+            <Button 
+              onPress={() => navigation.goBack()}
+              title={'Return to cart'}
+              color={"darkorange"}
+              >
+            </Button>
+          </View>
 
         </View>
       )}
@@ -572,7 +573,7 @@ const styles = StyleSheet.create({
   },
   addressButton: {
     backgroundColor: '#008397',
-    padding: 10,
+    padding: 20,
     borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center',

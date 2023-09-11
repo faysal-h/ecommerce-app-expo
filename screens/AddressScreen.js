@@ -4,22 +4,17 @@ import {
   View,
   ScrollView,
   Pressable,
-  TextInput,
 } from "react-native";
-import React, { useEffect, useContext, useState, useCallback } from "react";
-import { Feather, AntDesign } from "@expo/vector-icons";
+import React, { useEffect, useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import API from "../axios/AxiosConfig";
-import { UserType } from "../UserContext";
-import SearchBarCustom from "../components/SearchBar";
+
 
 const AddressScreen = () => {
   const navigation = useNavigation();
   const [addresses, setAddresses] = useState([]);
-  const { userId, setUserId } = useContext(UserType);
-  console.log('USER ID in ADDRESS Screen', userId)
   useEffect(() => {
     fetchAddresses();
   }, []);
@@ -41,7 +36,7 @@ const AddressScreen = () => {
       fetchAddresses();
     }, [])
   );
-
+  
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
       <View style={{ paddingHorizontal: 10 }}>
@@ -66,8 +61,8 @@ const AddressScreen = () => {
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </Pressable>
 
+        {/* all the added adresses */}
         <Pressable>
-          {/* all the added adresses */}
           {addresses?.map((item, index) => (
             <Pressable
               style={{
@@ -84,7 +79,7 @@ const AddressScreen = () => {
                 style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
               >
                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-                  {item?.name}
+                  {item?.addressee}
                 </Text>
                 <Entypo name="location-pin" size={24} color="red" />
               </View>
@@ -117,6 +112,7 @@ const AddressScreen = () => {
                 }}
               >
                 <Pressable
+                onPress={() => navigation.navigate('New', {'addressData':item, 'operation':'UPDATE'})}
                   style={{
                     backgroundColor: "#F5F5F5",
                     paddingHorizontal: 10,
@@ -130,6 +126,7 @@ const AddressScreen = () => {
                 </Pressable>
 
                 <Pressable
+                onPress={() => navigation.navigate('New', {'addressData':item, 'operation':'DELETE'})}
                   style={{
                     backgroundColor: "#F5F5F5",
                     paddingHorizontal: 10,
@@ -141,8 +138,8 @@ const AddressScreen = () => {
                 >
                   <Text>Remove</Text>
                 </Pressable>
-
-                <Pressable
+                  {/* DEFAULT ADDRESS BUTTON */}
+                {/* <Pressable
                   style={{
                     backgroundColor: "#F5F5F5",
                     paddingHorizontal: 10,
@@ -153,7 +150,7 @@ const AddressScreen = () => {
                   }}
                 >
                   <Text>Set as Default</Text>
-                </Pressable>
+                </Pressable> */}
               </View>
             </Pressable>
           ))}
