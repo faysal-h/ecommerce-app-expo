@@ -1,6 +1,5 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
 
 const API = axios.create({
@@ -39,13 +38,13 @@ API.interceptors.response.use(
         isRefreshing = true;
         try {
           const refreshToken = await AsyncStorage.getItem('refreshToken');
-          console.log('Refresh Token', refreshToken)
+          const accessToken = await AsyncStorage.getItem('authToken');
+          const refresh = {"refresh": refreshToken};
           // Send a request to your server to refresh the access token using the refreshToken.
           // Replace 'refreshTokenEndpoint' with your actual refresh token endpoint.
-          const response = await axios.post('http://127.0.0.1:8000/token/refresh/', {
-            refreshToken,
-          });
-          const newAccessToken = response.data.accessToken;
+          const response = await axios.post('http://127.0.0.1:8000/token/refresh/', refresh);
+
+          const newAccessToken = response.data.access;
           await AsyncStorage.setItem('authToken', newAccessToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           refreshSubscribers.forEach((callback) => callback(newAccessToken));
