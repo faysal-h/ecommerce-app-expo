@@ -59,7 +59,7 @@ const CartScreen = () => {
                 <Text numberOfLines={3} style={styles.itemTitle}>
                   {item?.title}
                 </Text>
-                <Text style={styles.itemPrice}>{item?.price.toFixed(2)}</Text>
+                <Text style={styles.itemPrice}>{item?.price}</Text>
                 {/* <Image
                 style={styles.stockImage}
                 source={{

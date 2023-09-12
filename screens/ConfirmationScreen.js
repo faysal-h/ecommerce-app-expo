@@ -9,7 +9,7 @@ import { cleanCart } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
 import RazorpayCheckout from "react-native-razorpay";
 import { Button } from "@rneui/themed";
-import GoBack from "../components/GoBack";
+
 import API from "../axios/AxiosConfig";
 
 const ConfirmationScreen = () => {
@@ -27,6 +27,7 @@ const ConfirmationScreen = () => {
   const total = cart
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
+  const finalTotal = total < 5000 ? total + 500 : total;
   useEffect(() => {
     fetchAddresses();
   }, []);
@@ -77,7 +78,7 @@ const ConfirmationScreen = () => {
         currency: "PKR",
         name: "Amazon",
         key: "rzp_test_E3GWYimxN7YMk8",
-        amount: total * 100,
+        amount: finalTotal * 100,
         prefill: {
           email: "void@razorpay.com",
           phone: "+9191919191",
@@ -93,7 +94,7 @@ const ConfirmationScreen = () => {
       const orderData = {
         userId: userId,
         cartItems: cart,
-        totalPrice: total,
+        totalPrice: finalTotal,
         shippingAddress: selectedAddress,
         paymentMethod: "card",
       };
@@ -114,49 +115,58 @@ const ConfirmationScreen = () => {
     }
   };
   return (
-    <ScrollView style={{ marginTop: 55 }}>
-      <View style={styles.stepContainer}>
-        <View style={styles.stepItem}>
-          {steps?.map((step, index) => (
-            <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
-              {index > 0 && (
-                <View
-                  style={[
-                    { flex: 1, height: 2, backgroundColor: "green" },
-                    index <= currentStep && { backgroundColor: "green" },
-                  ]}
-                />
-              )}
+    <ScrollView style={{ marginTop: 10 }}>
+    <View style={styles.stepContainer}>
+      <View style={styles.stepItem}>
+        {steps?.map((step, index) => (
+          <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
+            {index > 0 && (
               <View
                 style={[
-                  styles.stepDot,
-                  index < currentStep && { backgroundColor: "green" },
+                  { flex: 1, height: 2, backgroundColor: "green" },
+                  index <= currentStep && { backgroundColor: "green" },
                 ]}
-              >
-                {index < currentStep ? (
-                  <Text
-                    style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
-                  >
-                    &#10003;
-                  </Text>
-                ) : (
-                  <Text
-                    style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
-                  >
-                    {index + 1}
-                  </Text>
-                )}
-              </View>
-              <Text style={{ textAlign: "center", marginTop: 8 }}>
-                {step.title}
-              </Text>
+              />
+            )}
+            <View
+              style={[
+                styles.stepDot,
+                index < currentStep && { backgroundColor: "green" },
+              ]}
+            >
+              {index < currentStep ? (
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
+                >
+                  &#10003;
+                </Text>
+              ) : (
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
+                >
+                  {index + 1}
+                </Text>
+              )}
             </View>
-          ))}
-        </View>
+            <Text style={{ textAlign: "center", marginTop: 8 }}>
+              {step.title}
+            </Text>
+          </View>
+        ))}
       </View>
+    </View>
 
       {currentStep == 0 && (
         <View style={{ marginHorizontal: 20 }}>
+                    {/* BACK BUTTON */}
+          <View style={{flexDirection:'column'}}>
+            <Button 
+              onPress={() => navigation.goBack()}
+              title={'Return to cart'}
+              color={"darkorange"}
+              >
+            </Button>
+          </View>
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>
             Select Delivery Address
           </Text>
@@ -165,9 +175,15 @@ const ConfirmationScreen = () => {
             {addresses?.map((item, index) => (
               <Pressable
                 key={index}
-                style={styles.addressItem}
-              >
-                {selectedAddress && selectedAddress.id === item?.id ? (
+                onPress={() => setSelectedAdress(item)}
+                style={[
+                  styles.addressItem,
+                  selectedAddress && selectedAddress.id === item?.id
+                    ? { borderColor: "#008397", borderWidth: 2 }
+                    : null,
+                      ]}
+                >
+                {/* {selectedAddress && selectedAddress.id === item?.id ? (
                   <FontAwesome5 name="dot-circle" size={40} color="#008397" />
                 ) : (
                   <Entypo
@@ -176,7 +192,7 @@ const ConfirmationScreen = () => {
                     size={40}
                     color="gray"
                   />
-                )}
+                )} */}
 
                 <View style={{ marginLeft: 6 }}>
                   <View
@@ -215,31 +231,29 @@ const ConfirmationScreen = () => {
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      gap: 10,
-                      marginTop: 7,
+                      gap: 20,
+                      marginTop: 10,
+                      marginBottom: 7,
                     }}
                   >
                     <Pressable
+                    onPress={() => navigation.navigate('New', {'addressData':item, 'operation':'UPDATE'})}
                       style={styles.addressAction}
                     >
                       <Text>Edit</Text>
                     </Pressable>
 
                     <Pressable
+                      onPress={() => navigation.navigate('New', {'addressData':item, 'operation':'DELETE'})}
                       style={styles.addressAction}
                     >
                       <Text>Remove</Text>
                     </Pressable>
 
-                    <Pressable
-                      style={styles.addressAction}
-                    >
-                      <Text>Set as Default</Text>
-                    </Pressable>
                   </View>
 
                   <View>
-                    {selectedAddress && selectedAddress._id === item?._id && (
+                    {selectedAddress && selectedAddress.id === item?.id && (
                       <Pressable
                         onPress={() => setCurrentStep(1)}
                         style={styles.addressButton}
@@ -254,70 +268,10 @@ const ConfirmationScreen = () => {
               </Pressable>
             ))}
           </Pressable>
-          <View style={{flexDirection:'column',alignContent:'center',alignSelf:'center',width:150}}>
-            <Button 
-              onPress={() => navigation.goBack()}
-              title={'Return to cart'}
-              color={"darkorange"}
-              >
-            </Button>
-          </View>
+
 
         </View>
       )}
-
-      {/* {currentStep == 1 && (
-        <View style={{ marginHorizontal: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            Choose your delivery options
-          </Text>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "white",
-              padding: 8,
-              gap: 7,
-              borderColor: "#D0D0D0",
-              borderWidth: 1,
-              marginTop: 10,
-            }}
-          >
-            {option ? (
-              <FontAwesome5 name="dot-circle" size={20} color="#008397" />
-            ) : (
-              <Entypo
-                onPress={() => setOption(!option)}
-                name="circle"
-                size={20}
-                color="gray"
-              />
-            )}
-
-            <Text style={{ flex: 1 }}>
-              <Text style={{ color: "green", fontWeight: "500" }}>
-                Tomorrow by 10pm
-              </Text>{" "}
-              - FREE delivery with your Prime membership
-            </Text>
-          </View>
-
-          <Pressable
-            onPress={() => setCurrentStep(2)}
-            style={{
-              backgroundColor: "#FFC72C",
-              padding: 10,
-              borderRadius: 20,
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 15,
-            }}
-          >
-            <Text>Continue</Text>
-          </Pressable>
-        </View>
-      )} */}
 
       {currentStep == 1 && (
         <View style={{ marginHorizontal: 20 }}>
@@ -378,7 +332,7 @@ const ConfirmationScreen = () => {
       {currentStep === 2 && selectedOption === "cash" && (
         <View style={{ marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>Order Now</Text>
-
+{/* 
           <View
             style={styles.deliveryOption}
           >
@@ -396,7 +350,7 @@ const ConfirmationScreen = () => {
               size={24}
               color="black"
             />
-          </View>
+          </View> */}
 
           <View
             style={{
@@ -421,7 +375,7 @@ const ConfirmationScreen = () => {
                 Items
               </Text>
 
-              <Text style={{ color: "gray", fontSize: 16 }}>₹{total}</Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>Rs.{total}</Text>
             </View>
 
             <View
@@ -436,7 +390,7 @@ const ConfirmationScreen = () => {
                 Delivery
               </Text>
 
-              <Text style={{ color: "gray", fontSize: 16 }}>₹0</Text>
+              <Text style={{ color: "gray", fontSize: 16 }}>Rs. {total <5000 ? 500 : 0}</Text>
             </View>
 
             <View
@@ -454,7 +408,7 @@ const ConfirmationScreen = () => {
               <Text
                 style={{ color: "#C60C30", fontSize: 17, fontWeight: "bold" }}
               >
-                ₹{total}
+                Rs.{finalTotal}
               </Text>
             </View>
           </View>

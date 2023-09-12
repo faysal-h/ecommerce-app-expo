@@ -130,7 +130,7 @@ const NewAddressScreen = ({route}) => {
   };
   return (
     <View>
-      <Text style={styles.title}>Add a new Address</Text>
+      <Text style={styles.title}>{operation? operation:  "New"} Address</Text>
       <ScrollView>
         <View style={styles.header} />
 
