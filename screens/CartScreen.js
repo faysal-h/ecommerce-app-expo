@@ -6,6 +6,7 @@ import {
   Pressable,
   TextInput,
   Image,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
@@ -19,6 +20,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import SearchBarCustom from "../components/SearchBar";
 import { Button } from "@rneui/themed";
+import API from "../axios/AxiosConfig";
+
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart.cart);
@@ -38,6 +41,35 @@ const CartScreen = () => {
     dispatch(removeFromCart(item));
   };
   const navigation = useNavigation();
+  const addItemsToCart = async () => {
+    for (const cartItem of cart) {
+      const { id, name, quantity } = cartItem;
+      console.log('Detail of product is ', name, id)
+      try {
+        // Send a request to the "cart" API to add the item
+        const response = await API.post("/cart/", {
+          product_id : id,
+          quantity
+          })
+        if(response.status == 201){
+            return true;}else{return false;}
+      }catch(error){
+        Alert.alert("Proudct sold out. Remove from cart", name)
+      return false
+      }
+    }
+
+  }
+  const createCart = async () => {
+    if (await addItemsToCart()){
+      try {
+          const response = await API.get("/address/");
+          response.status ===200 ? navigation.navigate("Confirm"):console.log("Error creating cart at backend")
+
+      } catch (error) {
+        console.log("Error fetching ADDRESS in Order Confirmation", error);
+      }}else{console.log('adding items failed.')}
+  };
   return (
     <View style={{ flex: 1, marginHorizontal: 0, flexDirection: 'column' }}>
       <SearchBarCustom />
@@ -137,7 +169,7 @@ const CartScreen = () => {
         </View>
         <Button
           title={`Check Out`}
-          onPress={() => cart.length ? navigation.navigate("Confirm"):console.log("Cart is Empty")}
+          onPress={() => createCart()}
           color={'#FFC72C'}
         >
           <Text style={{ fontSize: 18 }}>{cart.length?`Buy (${cart.length}) items`:"Cart is Empty"}</Text>

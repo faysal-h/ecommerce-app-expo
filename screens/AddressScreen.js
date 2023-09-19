@@ -24,7 +24,7 @@ const AddressScreen = () => {
         "/address/"
       );
       const addresses = response.data;
-        console.log(response.data)
+        console.log("Addresses are ",response.status)
       setAddresses(addresses);
     } catch (error) {
       console.log("error", error);
@@ -65,7 +65,8 @@ const AddressScreen = () => {
         <Pressable>
           {addresses?.map((item, index) => (
             <Pressable
-              style={{
+            key={index}  
+            style={{
                 borderWidth: 1,
                 borderColor: "#D0D0D0",
                 padding: 10,
