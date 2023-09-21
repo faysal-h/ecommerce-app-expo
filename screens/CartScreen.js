@@ -52,7 +52,7 @@ const CartScreen = () => {
           quantity
           })
         if(response.status == 201){
-            return true;}else{return false;}
+            return true} else {return false}
       }catch(error){
         Alert.alert("Proudct sold out. Remove from cart", name)
       return false
@@ -61,14 +61,33 @@ const CartScreen = () => {
 
   }
   const createCart = async () => {
-    if (await addItemsToCart()){
-      try {
+    try {
+      // Clear the cart
+      const responseClearCart = await API.delete("/clear-cart/");
+      console.log('Clear Cart Success ', responseClearCart.status);
+  
+      if (responseClearCart.status === 200) {
+        // Clearing the cart succeeded, now add items to the cart
+        const itemsAddedToCart = await addItemsToCart();
+  
+        if (itemsAddedToCart) {
+          // Fetch the user's address
           const response = await API.get("/address/");
-          response.status ===200 ? navigation.navigate("Confirm"):console.log("Error creating cart at backend")
-
-      } catch (error) {
-        console.log("Error fetching ADDRESS in Order Confirmation", error);
-      }}else{console.log('adding items failed.')}
+  
+          if (response.status === 200) {
+            navigation.navigate("Confirm");
+          } else {
+            console.log("Error fetching ADDRESS in Order Confirmation", response);
+          }
+        } else {
+          console.log('Adding items to the cart failed.');
+        }
+      } else {
+        console.log('Clearing the cart failed.');
+      }
+    } catch (error) {
+      console.error("Error in createCart:", error);
+    }
   };
   return (
     <View style={{ flex: 1, marginHorizontal: 0, flexDirection: 'column' }}>
