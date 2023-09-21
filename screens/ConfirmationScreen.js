@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, ScrollView, Pressable,Alert } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { UserType } from "../UserContext";
 import { Entypo } from "@expo/vector-icons";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { cleanCart } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
@@ -21,6 +20,7 @@ const ConfirmationScreen = () => {
   ];
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState(0);
+  const [deliveryFee, setDeliveryFee] = useState(0);
   const [addresses, setAddresses] = useState(["H.No.160"]);
   const { userId, setUserId } = useContext(UserType);
   const cart = useSelector((state) => state.cart.cart);
@@ -42,6 +42,7 @@ const ConfirmationScreen = () => {
       console.log("Error fetching ADDRESS in Order Confirmation", error);
     }
   };
+
   const dispatch = useDispatch();
   const [selectedAddress, setSelectedAdress] = useState("");
   const [option, setOption] = useState(false);
@@ -49,18 +50,17 @@ const ConfirmationScreen = () => {
   const handlePlaceOrder = async () => {
     try {
       const orderData = {
-        userId: userId,
-        cartItems: cart,
-        totalPrice: total,
-        shippingAddress: selectedAddress,
-        paymentMethod: selectedOption,
+        address: selectedAddress.id,
+        customer : userId,
+        delivery_fee : 500,
+        payment_method: selectedOption,
       };
-
+      console.log("ORDER", orderData)
       const response = await API.post(
-        "/orders",
+        "/order/",
         orderData
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         navigation.navigate("Order");
         dispatch(cleanCart());
         console.log("order created successfully", response.data);
