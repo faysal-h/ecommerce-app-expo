@@ -10,6 +10,7 @@ import RazorpayCheckout from "react-native-razorpay";
 import { Button } from "@rneui/themed";
 
 import API from "../axios/AxiosConfig";
+import CustomButton from "../components/CustomButton";
 
 const ConfirmationScreen = () => {
   const steps = [
@@ -320,12 +321,12 @@ const ConfirmationScreen = () => {
 
             <Text>UPI / Credit or debit card</Text>
           </Pressable>
-          <Pressable
+          <CustomButton
             onPress={() => selectedOption == "" ? Alert.alert("Error", "Select a payment method"): setCurrentStep(2)}
-            style={styles.continueButton}
-          >
-            <Text>Continue</Text>
-          </Pressable>
+            customStyle={styles.continueButton}
+          
+            buttonText={'Continue'}
+          />
         </View>
       )}
 
@@ -429,12 +430,12 @@ const ConfirmationScreen = () => {
             </Text>
           </View>
 
-          <Pressable
+          <CustomButton
             onPress={handlePlaceOrder}
-            style={styles.continueButton}
-          >
-            <Text>Place your order</Text>
-          </Pressable>
+            customStyle={styles.continueButton}
+          
+            buttonText={'Place Order'}
+          />
         </View>
       )}
     </ScrollView>
@@ -554,8 +555,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   continueButton: {
-    backgroundColor: '#FFC72C',
-    padding: 10,
+    // backgroundColor: '#FFC72C',
+    paddingVertical: 20,
     borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center',

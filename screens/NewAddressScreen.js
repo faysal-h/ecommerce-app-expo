@@ -11,6 +11,7 @@ import React, { useState,useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import API from "../axios/AxiosConfig";
 import { Button } from "@rneui/themed";
+import CustomButton from "../components/CustomButton";
 
 const NewAddressScreen = ({route}) => {
   const navigation = useNavigation();
@@ -217,7 +218,7 @@ const NewAddressScreen = ({route}) => {
         </View>
       </ScrollView>
       <View style={styles.addButton}>
-        <Button
+        <CustomButton
         
           onPress={
             operation === 'UPDATE'
@@ -225,11 +226,10 @@ const NewAddressScreen = ({route}) => {
               : operation === 'DELETE'
               ? handleDeleteAddress
               : handleAddAddress
-          }>
-            <Text style={styles.addButtonLabel}>
-              {operation === 'DELETE' ? 'Delete Address' : operation === 'UPDATE' ? 'Update Address' : 'Add Address'}
-            </Text>
-        </Button>
+          }
+          buttonText={operation === 'DELETE' ? 'Delete Address' : operation === 'UPDATE' ? 'Update Address' : 'Add Address'}
+            
+        />
       </View>
     </View>
   );

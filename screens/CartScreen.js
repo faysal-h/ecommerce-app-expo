@@ -21,6 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import SearchBarCustom from "../components/SearchBar";
 import { Button } from "@rneui/themed";
 import API from "../axios/AxiosConfig";
+import CustomButton from "../components/CustomButton";
 
 
 const CartScreen = () => {
@@ -99,7 +100,7 @@ const CartScreen = () => {
         {cart?.map((item, index) => (
           <View style={styles.container} key={index}>
             <Pressable style={styles.itemRow}>
-              <View>
+              <View style={{marginHorizontal:5}}>
                 <Image
                   style={styles.itemImage}
                   source={{ uri: item?.image }}
@@ -108,16 +109,19 @@ const CartScreen = () => {
 
               <View style={styles.itemDetails}>
                 <Text numberOfLines={3} style={styles.itemTitle}>
-                  {item?.title}
+                  {item?.name}
                 </Text>
-                <Text style={styles.itemPrice}>{item?.price}</Text>
+                <Text style={styles.itemPrice}>Rs. {parseInt(item?.price)}</Text>
+                <Text style={styles.itemDiscountText}>
+                  {item?.discount ? "Rs. " +((item?.price * parseInt(item?.discount, 10) / 100) + parseInt(item?.price, 10)) : ""}
+                </Text>
                 {/* <Image
                 style={styles.stockImage}
                 source={{
                   uri: 'https://assets.stickpng.com/thumbs/5f4924cc68ecc70004ae7065.png',
                 }}
               /> */}
-                <Text style={styles.stockText}>In Stock</Text>
+                {/* <Text style={styles.stockText}>In Stock</Text> */}
               </View>
 
               {/* QUANTITY CONTROL */}
@@ -125,19 +129,21 @@ const CartScreen = () => {
                 <View style={styles.quantityButton}>
                   {item?.quantity > 1 ? (
                     <Button
-                      color={'#D8D8D8'}
+                      color={'#008E97'}
                       onPress={() => decreaseQuantity(item)}
                     >
-                      <AntDesign name="minus" size={16} color="black" />
+                      <AntDesign name="minus" size={24} color="black" />
                     </Button>
-                  ) : (
+                  ) 
+                  : (
                     <Pressable
                       onPress={() => deleteItem(item)}
                       style={styles.quantityButton}
                     >
-                      <AntDesign name="delete" size={24} color="black" />
+                      <AntDesign name="delete" size={16} color="black" />
                     </Pressable>
-                  )}
+                  )
+                  }
 
 
                   <View style={styles.quantityText}>
@@ -146,18 +152,18 @@ const CartScreen = () => {
 
                   {/* <View style={styles.quantityButton}> */}
                   <Button
-                    color={'#D8D8D8'}
+                    color={'#008E97'}
                     onPress={() => increaseQuantity(item)}
                   >
-                    <Feather name="plus" size={16} color="black" />
+                    <Feather name="plus" size={24} color="black" />
                   </Button>
                   {/* </View> */}
                 </View>
 
-                <Button
+                <CustomButton
                   onPress={() => deleteItem(item)}
-                  // style={styles.deleteButton}
-                  title={'Delete'}
+                  customStyle={styles.deleteButton}
+                  buttonText={'Delete from Cart'}
                 />
 
               </Pressable>
@@ -182,17 +188,15 @@ const CartScreen = () => {
 
 
       <View style={styles.subTotal}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal: </Text>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total.toFixed(2)}</Text>
+        <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+          <Text style={{ fontSize: 18, fontWeight: "400" }}>Subtotal : </Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total?.toFixed(2)}</Text>
         </View>
-        <Button
-          title={`Check Out`}
+        <CustomButton
           onPress={() => createCart()}
-          color={'#FFC72C'}
-        >
-          <Text style={{ fontSize: 18 }}>{cart.length?`Buy (${cart.length}) items`:"Cart is Empty"}</Text>
-        </Button>
+          customStyle={{paddingHorizontal:40, borderRadius:3, backgroundColor:'#008E97',paddingVertical:15}}
+          buttonText={cart.length?`Buy ${cart.length} items`:"Cart is Empty"}
+        />
       </View>
     </View>
   );
@@ -230,13 +234,26 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   itemDetails: {
-    width: 150,
-    marginTop: 10,
+    justifyContent:'center',
+    marginLeft:0,
+    marginTop: 0,
+  },
+  itemTitle: {
+    // backgroundColor:'yellow',
+    width: 100,
+    marginLeft:0,
+    // marginTop: 20,
   },
   itemPrice: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 6,
+    marginTop: 0,
+  },
+  itemDiscountText: {
+    fontSize: 14,
+    // fontWeight: 'bold',
+    color:'gray',
+    textDecorationLine: 'line-through'
   },
   stockImage: {
     width: 30,
@@ -248,17 +265,19 @@ const styles = StyleSheet.create({
   },
   quantityContainer: {
     marginHorizontal:0,
-    marginTop: 25,
-    marginBottom: 10,
+    paddingVertical:10,
+    marginTop: 15,
+    marginRight:10,
+    marginBottom: 0,
     flexDirection: 'column',
     alignItems: 'center',
     gap: 10,
   },
   quantityButton: {
-    backgroundColor: '#D8D8D8',
+    backgroundColor: '#008E97',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 7,
+    marginHorizontal: 15,
     borderRadius: 3,
 
   },
@@ -266,15 +285,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     paddingHorizontal: 18,
-    paddingVertical: 6,
+    paddingVertical: 15,
   },
   deleteButton: {
-    backgroundColor: 'white',
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    borderRadius: 5,
+    backgroundColor: 'darkred',
+    // paddingHorizontal: 8,
+    // paddingVertical: 10,
+    borderRadius: 3,
     borderColor: '#C0C0C0',
-    borderWidth: 0.6,
+    borderWidth: 0.9,
   },
   divider: {
     height: 1,

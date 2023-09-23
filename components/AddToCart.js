@@ -3,6 +3,10 @@ import { Pressable, StyleSheet, View, Text} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, incrementQuantity, decrementQuantity } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { Button } from "@rneui/themed";
+import CustomButton from "./CustomButton";
 
 
 const AddToCart = ({item}) => {
@@ -34,35 +38,23 @@ const AddToCart = ({item}) => {
         <View>
 
             {itemInCart ? (
-              <View style={styles.addToCartButton}>
+              <Pressable style={styles.addToCartButton}>
                   <Pressable onPress={() => decreaseQuantity()} style={styles.subButton}>
-                    <Text style={{ fontSize: 16}}>-</Text>
+                    <AntDesign name="minus" size={24} color="black" />
                   </Pressable>
 
 
                   <Text style={styles.subQuantity}>{itemInCart?.quantity}</Text>
 
                   <Pressable onPress={() => increaseQuantity()} style={styles.subButton}>
-                    <Text style={{ fontSize: 16 }}>+</Text>
+                    <Feather name="plus" size={24} color="black" />
                   </Pressable>
-              </View>
+              </Pressable>
             ) : (
-            
-            <Pressable
-              onPress={() => addItemToCart()}
-              style={styles.buyNowButton}
-              >
-              <Text>Add to Cart</Text>
-            </Pressable>  
+              
+            <CustomButton onPress={() => addItemToCart()} buttonText={'Add to Cart'} customStyle={styles.buyNowButton}/>
             )}
-          
-
-            <Pressable 
-              style={styles.buyNowButton}
-              onPress={() => handleBuyNow()}
-            >
-                <Text>Buy Now</Text>
-            </Pressable>
+            <CustomButton onPress={() => handleBuyNow()} buttonText={'Buy Now'} customStyle={styles.buyNowButton}/>
         </View>
     );
   };
@@ -79,7 +71,7 @@ const styles = StyleSheet.create({
       marginVertical: 5,
       paddingVertical:10,
     },
-    subButton:{flex:2,
+    subButton:{flex:1,
       // backgroundColor:'red',
       alignItems:'center'},
     subQuantity:{flex:1,
@@ -88,7 +80,7 @@ const styles = StyleSheet.create({
       // backgroundColor:'green',
       textAlign:'center'},
     buyNowButton: {
-      backgroundColor: "#FFAC1C",
+      // flexGrow:1,
       borderRadius: 3,
       justifyContent: "center",
       alignItems: "center",
