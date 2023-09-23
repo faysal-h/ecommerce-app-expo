@@ -321,7 +321,7 @@ const ConfirmationScreen = () => {
             <Text>UPI / Credit or debit card</Text>
           </Pressable>
           <Pressable
-            onPress={() => setCurrentStep(2)}
+            onPress={() => selectedOption == "" ? Alert.alert("Error", "Select a payment method"): setCurrentStep(2)}
             style={styles.continueButton}
           >
             <Text>Continue</Text>
