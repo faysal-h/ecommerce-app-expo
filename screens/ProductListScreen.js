@@ -14,10 +14,10 @@ const ProductListScreen = ({route}) => {
                     backgroundColor:'#008E97',
                     alignItems:'center',
                     justifyContent:'center'}}>
-            <View style={{paddingLeft:15,flexGrow:0}}>
+            <View>
                 <GoBack />
             </View>
-            <View style={{flexDirection:'row',justifyContent:'center',flexGrow:1}}>
+            <View style={{flexDirection:'row',justifyContent:'center',flexGrow:1,marginRight:40}}>
                 <Text style={{margin:10,fontSize:26,fontWeight:'bold', color:'black'}}>
                     {route?.params?.category}
                 </Text>

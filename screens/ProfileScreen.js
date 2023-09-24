@@ -6,19 +6,21 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import React, { useEffect, useContext, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useContext, useState, useCallback } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { UserType } from "../UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddressScreen from "./AddressScreen";
 import API from "../axios/AxiosConfig";
+import SearchBarCustom from "../components/SearchBar";
+import CustomButton from "../components/CustomButton";
 
 const ProfileScreen = () => {
   const { userId, setUserId } = useContext(UserType);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
-  const [user, setUser] = useState();
+  const [userName, setUserName] = useState();
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -27,10 +29,10 @@ const ProfileScreen = () => {
           );
         console.log('Response for user is', response.data)
         const id = response.data.id;
-        setUser(id)
+        console.log("Name is ",response.data.id)
         setUserId(id)
         // console.log('Profile setting user id', id)
-        // setUser(id);
+        setUserName(response.data.name);
         // console.log('Profile Done setting', userId)
       } catch (error) {
         console.log("Error fetching user details", error);
@@ -51,35 +53,37 @@ const ProfileScreen = () => {
     const fetchOrders = async () => {
       try {
         const response = await API.get(
-          `/orders/${userId}`
+          '/order/'
         );
-        const orders = response.data.orders;
-        setOrders(orders);
-
+        const fetchedOrders = response.data;
+        // console.log("TYPE OF ORDERS IS",(fetchedOrders))
+        setOrders(fetchedOrders)
         setLoading(false);
+        console.log('ORDERS in ARRAY', orders.length)
       } catch (error) {
         console.log("error", error);
       }
     };
-
     fetchOrders();
   }, []);
-  console.log("orders", orders);
+  // console.log("orders are", orders);
   return (
     <View style={styles.container}>
-      <View style={{maxHeight:400}}>
+      <SearchBarCustom />
+      <View style={{marginLeft:10}}>
+        <Text style={{fontSize:26, fontWeight:'bold'}}>Hi, {userName}</Text>
+      </View>
+      <View style={{maxHeight:550}}>
         <AddressScreen />
       </View>
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.buttonContainer}>
-          <Pressable style={styles.button}>
+          {/* <Pressable style={styles.button}>
             <Text style={styles.buttonText}>Your orders</Text>
-          </Pressable>
+          </Pressable> */}
 
-          <Pressable onPress={logout} style={styles.button}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </Pressable>
+          <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
         </View>
 
         {/* <View style={styles.buttonContainer}>
@@ -94,14 +98,14 @@ const ProfileScreen = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {loading ? (
             <Text>Loading...</Text>
-          ) : orders.length > 0 ? (
+          ) : orders?.length > 0 ? (
             orders.map((order) => (
-              <Pressable style={styles.orderItem} key={order._id}>
-                {order.products.slice(0, 1)?.map((product) => (
-                  <View style={styles.orderImage} key={product._id}>
+              <Pressable style={styles.orderItem} key={order.id}>
+                {/* {order.products.slice(0, 1)?.map((product) => (
+                  <View style={styles.orderImage} key={product.id}>
                     <Image source={{ uri: product.image }} />
                   </View>
-                ))}
+                ))} */}
               </Pressable>
             ))
           ) : (
@@ -128,10 +132,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   button: {
-    padding: 20,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 3,
     flex: 1,
+    padding: 20,
+    backgroundColor: 'darkred',
+    borderRadius: 3,
   },
   buttonText: {
     textAlign: 'center',
