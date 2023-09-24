@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import SearchBarCustom from "../components/SearchBar";
 import API from "../axios/AxiosConfig";
 import { useNavigation } from "@react-navigation/native";
 import { PRIMARY_COLOR } from "../constants/constant";
+import SearchProduct from "../components/SearchProduct";
 
 const CategoryScreen = () => {
     const navigation = useNavigation();
@@ -25,7 +25,7 @@ const CategoryScreen = () => {
       };
     return(
         <View style={{flexDirection:'column', flexGrow:1}}>
-          <SearchBarCustom />
+          <SearchProduct />
           <View style={{backgroundColor:PRIMARY_COLOR, alignItems:'center'}}>
 
             <Text style={styles.title}>Categories</Text>

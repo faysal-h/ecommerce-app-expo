@@ -8,8 +8,8 @@ import { SliderBox } from "react-native-image-slider-box";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import SearchBarCustom from "../components/SearchBar";
 import ProductList from "../components/ProductList";
+import SearchProduct from "../components/SearchProduct";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -34,62 +34,26 @@ const HomeScreen = () => {
     fetchData();
   }, []);
 
-  const onGenderOpen = useCallback(() => {
-    setCompanyOpen(false);
-  }, []);
-
   const cart = useSelector((state) => state.cart.cart);
 
   return (
     <View style={{flex:1}}>
-        <SearchBarCustom />
+        {/* <SearchBarCustom /> */}
+        <SearchProduct />
         <View style={{flex:1, flexShrink:1, minHeight:200}}>
         
           {/* SLIDER BOX */}
           <SliderBox
             images={imagesSlider}
-            autoPlay
+            // autoPlay
             circleLoop
             dotColor={"#13274F"}
             inactiveDotColor="#90A4AE"
             ImageComponentStyle={{ width: "100%" }}
+            // autoplayInterval={500}
           />
 
-          {/* OFFERS BOX  */}
         {/* <ScrollView>
-          <Text style={stylesOffer.heading}>
-            Trending Deals of the week
-          </Text>
-
-          <View style={stylesOffer.container}>
-            {deals.map((item, index) => (
-              <Pressable
-                key={item.id}
-                onPress={() =>
-                  navigation.navigate("Info", {
-                    item: item,
-                  })
-                }
-                style={stylesOffer.pressable}
-              >
-                <Image
-                  style={stylesOffer.image}
-                  source={{ uri: item?.images[0] }}
-                />
-              </Pressable>
-            ))}
-          </View>
-          
-
-          <Text
-            style={{
-              height: 1,
-              borderColor: "#D0D0D0",
-              borderWidth: 5,
-              marginTop: 15,
-            }}
-          />
-
         </ScrollView> */}
           <Text
             style={{

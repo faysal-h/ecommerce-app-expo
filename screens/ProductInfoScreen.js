@@ -6,14 +6,11 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import React ,{useState} from "react";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import React from "react";
 import { useRoute } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import AddToCart from "../components/AddToCart";
-import SearchBarCustom from "../components/SearchBar";
+import SearchProduct from "../components/SearchProduct";
 
 
 const ProductInfoScreen = () => {
@@ -27,7 +24,7 @@ const ProductInfoScreen = () => {
   return (
     <View style={{flex:1,justifyContent:'flex-start'}}>
       {/* SEARCH BAR */}
-      <SearchBarCustom />
+      <SearchProduct />
 
       <ScrollView style={{flexGrow:1}}
         // style={{ marginTop: 0, flex: 1, backgroundColor: "white" }}

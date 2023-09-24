@@ -1,14 +1,14 @@
 import { View, Text } from "react-native";
-import SearchBarCustom from "../components/SearchBar";
 import ProductList from "../components/ProductList";
 import GoBack from "../components/GoBack";
 import { useState } from "react";
+import SearchProduct from "../components/SearchProduct";
 const ProductListScreen = ({route}) => {
     useState
  return(
     <View>
         <View style={{flexGrow:1}}>
-            <SearchBarCustom />
+            <SearchProduct />
         </View>
         <View style={{flexDirection:'row',
                     backgroundColor:'#008E97',

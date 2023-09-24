@@ -12,8 +12,8 @@ import { UserType } from "../UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddressScreen from "./AddressScreen";
 import API from "../axios/AxiosConfig";
-import SearchBarCustom from "../components/SearchBar";
 import CustomButton from "../components/CustomButton";
+import SearchProduct from "../components/SearchProduct";
 
 const ProfileScreen = () => {
   const { userId, setUserId } = useContext(UserType);
@@ -55,6 +55,7 @@ const ProfileScreen = () => {
         const response = await API.get(
           '/order/'
         );
+        console.log('Orders are', response.data)
         const fetchedOrders = response.data;
         // console.log("TYPE OF ORDERS IS",(fetchedOrders))
         setOrders(fetchedOrders)
@@ -68,51 +69,42 @@ const ProfileScreen = () => {
   }, []);
   // console.log("orders are", orders);
   return (
-    <View style={styles.container}>
-      <SearchBarCustom />
-      <View style={{marginLeft:10}}>
-        <Text style={{fontSize:26, fontWeight:'bold'}}>Hi, {userName}</Text>
-      </View>
-      <View style={{maxHeight:550}}>
-        <AddressScreen />
-      </View>
-
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.buttonContainer}>
-          {/* <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Your orders</Text>
-          </Pressable> */}
-
-          <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
+    <View>
+      <SearchProduct />
+        <View style={{
+          flex:0,
+          flexDirection: 'column',
+          // justifyContent:'space-between',
+          backgroundColor:'white'}}
+        >
+        <View style={{flex:0,marginLeft:10, flexGrow:1}}>
+          <Text style={{fontSize:26, fontWeight:'bold'}}>Hi, {userName}</Text>
+        </View>
+        <View style={{flex:0,maxHeight:600}}>
+          <AddressScreen />
         </View>
 
-        {/* <View style={styles.buttonContainer}>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Your Account</Text>
-          </Pressable>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Buy Again</Text>
-          </Pressable>
-        </View> */}
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* ORDERS */}
+        {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {loading ? (
             <Text>Loading...</Text>
-          ) : orders?.length > 0 ? (
-            orders.map((order) => (
-              <Pressable style={styles.orderItem} key={order.id}>
-                {/* {order.products.slice(0, 1)?.map((product) => (
+            ) : orders?.length > 0 ? (
+              orders.map((order) => (
+                <Pressable style={styles.orderItem} key={order.id}>
+                {order.cart_items.slice(0, 1)?.map((product) => (
                   <View style={styles.orderImage} key={product.id}>
-                    <Image source={{ uri: product.image }} />
+                  <Image source={{ uri: product.image }} />
                   </View>
-                ))} */}
-              </Pressable>
-            ))
-          ) : (
-            <Text>No orders found</Text>
-          )}
-        </ScrollView>
-      </ScrollView>
+                  ))}
+                  </Pressable>
+                  ))
+                  ) : (
+                    <Text>No orders found</Text>
+                    )}
+                  </ScrollView> */}
+
+        <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
+      </View>
     </View>
   );
 };
@@ -123,6 +115,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent:'space-between',
+    backgroundColor:'yellow',
+    
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -132,8 +126,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   button: {
-    flex: 1,
+    flex: 0,
+    flexGrow:0,
     padding: 20,
+    marginHorizontal:10,
     backgroundColor: 'darkred',
     borderRadius: 3,
   },

@@ -18,7 +18,7 @@ import {
   removeFromCart,
 } from "../redux/CartReducer";
 import { useNavigation } from "@react-navigation/native";
-import SearchBarCustom from "../components/SearchBar";
+import SearchProduct from "../components/SearchProduct";
 import { Button } from "@rneui/themed";
 import API from "../axios/AxiosConfig";
 import CustomButton from "../components/CustomButton";
@@ -100,7 +100,7 @@ const CartScreen = () => {
   };
   return (
     <View style={{ flex: 1, marginHorizontal: 0, flexDirection: 'column' }}>
-      <SearchBarCustom />
+      <SearchProduct />
       {cart?.length ? 
       <ScrollView
         showsVerticalScrollIndicator={false}

@@ -6,9 +6,11 @@ import {
   Pressable,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
 import API from "../axios/AxiosConfig";
 
 
@@ -24,7 +26,7 @@ const AddressScreen = () => {
         "/address/"
       );
       const addresses = response.data;
-        console.log("Addresses are ",response.status)
+      // console.log("Addresses are ",(response.data))
       setAddresses(addresses);
     } catch (error) {
       console.log("error", error);
