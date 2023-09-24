@@ -93,6 +93,7 @@ const CartScreen = () => {
   return (
     <View style={{ flex: 1, marginHorizontal: 0, flexDirection: 'column' }}>
       <SearchBarCustom />
+      {cart?.length ? 
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ marginTop: 5, marginHorizontal: 5, backgroundColor: 'white', flexGrow: 1 }}
@@ -185,7 +186,14 @@ const CartScreen = () => {
           </View>
         ))}
       </ScrollView>
-
+      : 
+      <View style={{justifyContent:'center',alignItems:'center', backgroundColor: 'white', flexGrow: 1 }}>
+        <Image 
+          style={{resizeMode:'center',}}
+          source={require("../assets/empty-cart.png")}
+        />
+      </View>
+      }
 
       <View style={styles.subTotal}>
         <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
