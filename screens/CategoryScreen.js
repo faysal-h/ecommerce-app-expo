@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import SearchBarCustom from "../components/SearchBar";
 import API from "../axios/AxiosConfig";
 import { useNavigation } from "@react-navigation/native";
+import { PRIMARY_COLOR } from "../constants/constant";
 
 const CategoryScreen = () => {
     const navigation = useNavigation();
@@ -25,9 +26,9 @@ const CategoryScreen = () => {
     return(
         <View style={{flexDirection:'column', flexGrow:1}}>
           <SearchBarCustom />
-          <View style={{backgroundColor:'lightgray', borderBottomColor:'darkgray', borderWidth:2, alignItems:'center'}}>
+          <View style={{backgroundColor:PRIMARY_COLOR, alignItems:'center'}}>
 
-          <Text style={styles.title}>Categories</Text>
+            <Text style={styles.title}>Categories</Text>
           </View>
           {/* CATGORY AREA */}
           <View style={styles.container}>
@@ -74,14 +75,14 @@ const styles = StyleSheet.create({
       padding: 10,
       justifyContent:'center',
       // backgroundColor: '#f1f4e9',
-      backgroundColor: 'lightgray',
+      backgroundColor: 'white',
     },
     title: {
       margin:10,
       verticalAlign:'middle',
       flexDirection:'row',
       fontSize: 26,
-      color:'#008E97',
+      color:'black',
       fontWeight: 'bold',
       marginBottom: 10,
     },
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-evenly', // Add space between items
     },
     categoryButton: {
-      backgroundColor: '#eee',
+      backgroundColor: 'white',
       borderRadius: 5,
       margin:10,
       flexDirection: 'column', // Added to align icon and text horizontally
