@@ -43,24 +43,32 @@ const CartScreen = () => {
   };
   const navigation = useNavigation();
   const addItemsToCart = async () => {
+    let allItemsAdded = true; // Initialize as true
+  
     for (const cartItem of cart) {
       const { id, name, quantity } = cartItem;
-      console.log('Detail of product is ', name, id)
+      console.log('Detail of product is ', name, id);
       try {
         // Send a request to the "cart" API to add the item
         const response = await API.post("/cart/", {
-          product_id : id,
-          quantity
-          })
-        if(response.status == 201){
-            return true} else {return false}
-      }catch(error){
-        Alert.alert("Proudct sold out. Remove from cart", name)
-      return false
+          product_id: id,
+          quantity,
+        });
+        if (response.status !== 201) {
+          // If any item fails to be added, set allItemsAdded to false
+          allItemsAdded = false;
+          break; // Exit the loop early if there's an error
+        }
+      } catch (error) {
+        Alert.alert("Product sold out. Remove from cart", name);
+        allItemsAdded = false;
+        break; // Exit the loop early on error
       }
     }
-
-  }
+  
+    return allItemsAdded; // Return the overall status
+  };
+  
   const createCart = async () => {
     try {
       // Clear the cart
