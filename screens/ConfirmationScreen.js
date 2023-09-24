@@ -11,6 +11,7 @@ import { Button } from "@rneui/themed";
 
 import API from "../axios/AxiosConfig";
 import CustomButton from "../components/CustomButton";
+import { PRIMARY_COLOR } from "../constants/constant";
 
 const ConfirmationScreen = () => {
   const steps = [
@@ -62,6 +63,7 @@ const ConfirmationScreen = () => {
         orderData
       );
       if (response.status === 201) {
+        setCurrentStep(0)
         navigation.navigate("Order");
         dispatch(cleanCart());
         console.log("order created successfully", response.data);
@@ -117,49 +119,32 @@ const ConfirmationScreen = () => {
   };
   return (
     <ScrollView style={{ marginTop: 10 }}>
-    <View style={styles.stepContainer}>
-      <View style={styles.stepItem}>
-        {steps?.map((step, index) => (
-          <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
-            {index > 0 && (
+      <View style={styles.stepContainer}>
+        <View style={styles.stepItem}>
+          {steps.map((step, index) => (
+            <View key={index} style={styles.step}>
+              {index > 0 && <View style={styles.progressLine} />}
               <View
                 style={[
-                  { flex: 1, height: 2, backgroundColor: "green" },
-                  index <= currentStep && { backgroundColor: "green" },
+                  styles.stepDot,
+                  index < currentStep ? styles.completedStepDot : null,
+                  index === currentStep ? styles.currentStepDot : null,
                 ]}
-              />
-            )}
-            <View
-              style={[
-                styles.stepDot,
-                index < currentStep && { backgroundColor: "green" },
-              ]}
-            >
-              {index < currentStep ? (
-                <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
-                >
-                  &#10003;
-                </Text>
-              ) : (
-                <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "white" }}
-                >
-                  {index + 1}
-                </Text>
-              )}
+              >
+                {index < currentStep ? (
+                  <Text style={styles.stepTextCompleted}>✓</Text>
+                ) : (
+                  <Text style={styles.stepText}>{index + 1}</Text>
+                )}
+              </View>
+              <Text style={styles.stepTitle}>{step.title}</Text>
             </View>
-            <Text style={{ textAlign: "center", marginTop: 8 }}>
-              {step.title}
-            </Text>
-          </View>
-        ))}
+          ))}
+        </View>
       </View>
-    </View>
-
       {currentStep == 0 && (
         <View style={{ marginHorizontal: 20 }}>
-                    {/* BACK BUTTON */}
+          {/* BACK BUTTON */}
           <View style={{flexDirection:'column'}}>
             <Button 
               onPress={() => navigation.goBack()}
@@ -168,8 +153,8 @@ const ConfirmationScreen = () => {
               >
             </Button>
           </View>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Select Delivery Address
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical:5,color:'black' }}>
+            Select a Delivery Address
           </Text>
 
           <Pressable>
@@ -269,8 +254,6 @@ const ConfirmationScreen = () => {
               </Pressable>
             ))}
           </Pressable>
-
-
         </View>
       )}
 
@@ -319,7 +302,7 @@ const ConfirmationScreen = () => {
               <Entypo name="circle" size={30} color="gray" />
             )}
 
-            <Text>UPI / Credit or debit card</Text>
+            <Text>Jazz Cash / Easy Paisa</Text>
           </Pressable>
           <CustomButton
             onPress={() => selectedOption == "" ? Alert.alert("Error", "Select a payment method"): setCurrentStep(2)}
@@ -443,8 +426,53 @@ const ConfirmationScreen = () => {
 };
 
 export default ConfirmationScreen;
-
 const styles = StyleSheet.create({
+  stepContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  step: {
+    alignItems: 'center',
+    marginHorizontal: 16,
+  },
+  progressLine: {
+    flex: 1,
+    height: 2,
+    backgroundColor: 'green',
+  },
+  stepDot: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'gray', // Default color for uncompleted steps
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  completedStepDot: {
+    backgroundColor: 'green',
+  },
+  currentStepDot: {
+    backgroundColor: PRIMARY_COLOR,
+  },
+  stepTextCompleted: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  stepText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  stepTitle: {
+    textAlign: 'center',
+    marginTop: 8,
+  },
   container: {
     marginTop: 55,
   },
