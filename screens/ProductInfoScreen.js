@@ -14,23 +14,29 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import AddToCart from "../components/AddToCart";
 import SearchBarCustom from "../components/SearchBar";
+
+
 const ProductInfoScreen = () => {
   const route = useRoute();
   const { width } = Dimensions.get("window");
   const height = (width * 100) / 105;
   const cart = useSelector((state) => state.cart.cart);
+  const price = parseInt(route.params.item?.price);
+  const discount = parseInt(route.params.item?.discount);
+  const originalPrice = (price * discount / 100) + price;
   return (
-    <View>
+    <View style={{flex:1,justifyContent:'flex-start'}}>
       {/* SEARCH BAR */}
       <SearchBarCustom />
-      <ScrollView
+
+      <ScrollView style={{flexGrow:1}}
         // style={{ marginTop: 0, flex: 1, backgroundColor: "white" }}
         showsVerticalScrollIndicator={false}
       >{route.params.item.images?
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {route.params.item.images?.map((item, index) => (
             <ImageBackground
-              style={{ width, height, marginTop: 25, resizeMode: "contain" }}
+              style={{ width, height, marginTop: 10, resizeMode: "contain" }}
               source={{ uri: item }}
               key={index}
             >
@@ -42,46 +48,6 @@ const ProductInfoScreen = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <View
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
-                    backgroundColor: "#C60C30",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      textAlign: "center",
-                      fontWeight: "600",
-                      fontSize: 12,
-                    }}
-                  >
-                    20% off
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
-                    backgroundColor: "#E0E0E0",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="share-variant"
-                    size={24}
-                    color="black"
-                  />
-                </View>
               </View>
 
               <View
@@ -89,7 +55,7 @@ const ProductInfoScreen = () => {
                   width: 40,
                   height: 40,
                   borderRadius: 20,
-                  backgroundColor: "#E0E0E0",
+                  backgroundColor: "#C60C30",
                   justifyContent: "center",
                   alignItems: "center",
                   flexDirection: "row",
@@ -98,14 +64,23 @@ const ProductInfoScreen = () => {
                   marginBottom: 20,
                 }}
               >
-                <AntDesign name="hearto" size={24} color="black" />
+                            <Text
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                      fontWeight: "600",
+                      fontSize: 12,
+                    }}
+                  >
+                    {route.params.item.discount}% off
+                  </Text>
               </View>
             </ImageBackground>
           ))}
         </ScrollView>
         :
         <ImageBackground
-        style={{ width, height, marginTop: 25, resizeMode: "contain" }}
+        style={{ width, height, marginTop: 5, resizeMode: "contain" }}
         source={{ uri: route.params.item.image }}
       >
         <View
@@ -116,18 +91,23 @@ const ProductInfoScreen = () => {
             justifyContent: "space-between",
           }}
         >
-          <View
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: "#C60C30",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Text
+        </View>
+
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: "#C60C30",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+            marginTop: "auto",
+            marginLeft: 20,
+            marginBottom: 20,
+          }}
+        >
+                      <Text
               style={{
                 color: "white",
                 textAlign: "center",
@@ -137,90 +117,42 @@ const ProductInfoScreen = () => {
             >
               {route.params.item.discount}% off
             </Text>
-          </View>
-
-          <View
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-              backgroundColor: "#E0E0E0",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <MaterialCommunityIcons
-              name="share-variant"
-              size={24}
-              color="black"
-            />
-          </View>
-        </View>
-
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: "#E0E0E0",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            marginTop: "auto",
-            marginLeft: 20,
-            marginBottom: 20,
-          }}
-        >
-          <AntDesign name="hearto" size={24} color="black" />
         </View>
       </ImageBackground>
         }
         {/* TITLE */}
         <View style={{ padding: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "500" }}>
-            {route?.params?.item.title}
+          <Text style={{ fontSize: 24, fontWeight: "500", fontWeight:'bold',paddingVertical:10 }}>
+            {route?.params?.item.name}
           </Text>
+
+        {/* BORDER */}
+        <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
+        
+        {/* DESCRIPTION */}
+        <Text style={{ fontSize: 15, fontWeight: "500",paddingVertical:10 }}>
+          {route?.params?.item.description}
+        </Text>
+
+        {/* BORDER */}
+        <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
 
           {/* PRICE */}
-          <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 6 }}>
-            Rs.{route?.params?.item.price}
-          </Text>
-        </View>
-
-        {/* BORDER */}
-        <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
-
-        {/* COLOR */}
-        {/* <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-          <Text>Color: </Text>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            {route?.params?.color}
-          </Text>
-        </View> */}
-
-        {/* SIZE */}
-        {/* <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
-          <Text>Size: </Text>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            {route?.params?.item.size}
-          </Text>
-        </View> */}
-
-        {/* BORDER */}
-        <Text style={{ height: 1, borderColor: "#D0D0D0", borderWidth: 1 }} />
-
-        {/* PRICE */}
-        <View style={{ padding: 10 }}>
-          <Text style={{ fontSize: 15, fontWeight: "bold", marginVertical: 5 }}>
-            Total : Rs.{route.params.item.price}
+          <Text style={{ fontSize: 18, fontWeight: "600", marginTop: 10 }}>
+            Rs.{price}
           </Text>
 
-          <Text style={{ color: "red" }}>
-            FREE delivery Tomorrow.
+        {/* PRICE WITHOUT DISOUNT */}
+          <Text style={{ fontSize: 14, fontWeight: "bold", color:'gray', textDecorationLine:'line-through' }}>
+            {originalPrice == price ? "" : "Rs. "+originalPrice }
+            
           </Text>
 
-          {/* LOCATION */}
+          <Text style={{ color: "red", marginTop:10}}>
+            Delivery in Three days.
+          </Text>
+
+          {/* LOCATION
           <View
             style={{
               flexDirection: "row",
@@ -234,14 +166,13 @@ const ProductInfoScreen = () => {
             <Text style={{ fontSize: 15, fontWeight: "500" }}>
               Deliver To LAHORE 54000
             </Text>
-          </View>
+          </View> */}
         </View>
 
-        <Text style={{ color: "green", marginHorizontal: 10, fontWeight: "500" }}>
-          IN Stock
-        </Text>
       </ScrollView>
-      <AddToCart item={route?.params?.item} />
+      <View style={{flexGrow:0}}>
+        <AddToCart item={route?.params?.item} />
+      </View>
     </View>
   );
 };
