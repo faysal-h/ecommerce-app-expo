@@ -134,9 +134,9 @@ const NewAddressScreen = ({route}) => {
       });
   };
   return (
-    <View>
+    <View style={{justifyContent:'space-between', flexGrow:1,}}>
       <Text style={styles.title}>{operation? operation:  "New"} Address</Text>
-      <ScrollView>
+      <ScrollView style={{flex:1,flexGrow:1,}}>
         <View style={styles.header} />
 
         <View style={styles.container}>
@@ -281,7 +281,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   addButton: {
-    padding: 19,
+    flexGrow:0,
+    padding: 20,
     borderRadius: 6,
     marginTop: 0,
   },
