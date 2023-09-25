@@ -18,13 +18,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.faysel.hstore"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "ios": {
       "bundleIdentifier": "com.host.exponent"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "56670c89-732c-45f0-a899-316e97a2c075"
+      }
     }
   }
 }

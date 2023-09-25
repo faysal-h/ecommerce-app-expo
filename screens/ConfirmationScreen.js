@@ -305,7 +305,7 @@ const ConfirmationScreen = () => {
             <Text>Jazz Cash / Easy Paisa</Text>
           </Pressable>
           <CustomButton
-            onPress={() => selectedOption == "" ? Alert.alert("Error", "Select a payment method"): setCurrentStep(2)}
+            onPress={() => selectedOption == "" ? Alert.alert("Error", "Select Cash On Delivery"): setCurrentStep(2)}
             customStyle={styles.continueButton}
           
             buttonText={'Continue'}

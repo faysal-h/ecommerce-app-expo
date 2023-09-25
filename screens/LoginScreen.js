@@ -3,7 +3,6 @@ import {
   Text,
   View,
   SafeAreaView,
-  Image,
   KeyboardAvoidingView,
   TextInput,
   Pressable,
@@ -45,7 +44,6 @@ const LoginScreen = () => {
     axios
       .post("http://localhost:8000/token/", user)
       .then((response) => {
-        console.log(response.data);
         const accessToken = response.data.access;
         const refreshToken = response.data.refresh;
         AsyncStorage.setItem("authToken", accessToken);

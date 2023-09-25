@@ -18,7 +18,7 @@ app.listen(port, () => {
 });
 
 mongoose
-  .connect("mongodb+srv://sujananand:sujan@cluster0.cueelai.mongodb.net/", {
+  .connect("mongodb+srv://faisal:faisal@cluster0.i9ekkpn.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -38,14 +38,14 @@ const sendVerificationEmail = async (email, verificationToken) => {
     // Configure the email service or SMTP details here
     service: "gmail",
     auth: {
-      user: "sujananand0@gmail.com",
-      pass: "wkkjjprzkqxtboju",
+      user: "fayselhanif@gmail.com",
+      pass: "ximvxhxrsvbvkeoz",
     },
   });
 
   // Compose the email message
   const mailOptions = {
-    from: "amazon.com",
+    from: "Husnain.com",
     to: email,
     subject: "Email Verification",
     text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
