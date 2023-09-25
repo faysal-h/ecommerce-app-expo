@@ -26,7 +26,6 @@ const AddressScreen = () => {
         "/address/"
       );
       const addresses = response.data;
-      // console.log("Addresses are ",(response.data))
       setAddresses(addresses);
     } catch (error) {
       console.log("error", error);
@@ -40,7 +39,7 @@ const AddressScreen = () => {
   );
   
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
+    // <View showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
       <View style={{ paddingHorizontal: 10 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>Your Addresses</Text>
 
@@ -92,7 +91,7 @@ const AddressScreen = () => {
               </Text>
 
               <Text style={{ fontSize: 15, color: "#181818" }}>
-                Street No. {item?.street}
+                Street No. {item?.street}, {item?.area}
               </Text>
 
               <Text style={{ fontSize: 15, color: "#181818" }}>
@@ -159,7 +158,7 @@ const AddressScreen = () => {
           ))}
         </Pressable>
       </View>
-    </ScrollView>
+    // </View>
   );
 };
 

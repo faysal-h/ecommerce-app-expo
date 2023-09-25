@@ -18,11 +18,12 @@ const NewAddressScreen = ({route}) => {
   // const route = useRoute();
   const { params } = route;
   const operation = route.params?.operation;
-  console.log('Route params are ', params?.addressData?.postal_code)
+  console.log('Route params are ', params?.addressData)
   const [name, setName] = useState("");
   const [mobileNo, setMobileNo] = useState("0300");
   const [houseNo, setHouseNo] = useState("");
   const [street, setStreet] = useState("");
+  const [area, setArea] = useState("");
   const [city, setCity] = useState("Lahore");
   const [district, setDistrict] = useState("Lahore");
   const [province, setProvince] = useState("Punjab");
@@ -53,6 +54,7 @@ const NewAddressScreen = ({route}) => {
         setMobileNo(addressData.addressee_phone);
         setHouseNo(addressData.house_no);
         setStreet(addressData.street);
+        setArea(addressData.area);
         setCity(addressData.city);
         setDistrict(addressData.district);
         setProvince(addressData.province);
@@ -65,6 +67,7 @@ const NewAddressScreen = ({route}) => {
       const address = {
           addressee:name,
           addressee_phone:mobileNo,
+          area:area,
           city:city,
           country:country,
           district:district,
@@ -89,6 +92,7 @@ const NewAddressScreen = ({route}) => {
     const addressData = {
       addressee: name,
       addressee_phone: mobileNo,
+      area: area,
       city: city,
       country: country,
       district: district,
@@ -179,6 +183,17 @@ const NewAddressScreen = ({route}) => {
               placeholderTextColor={'gray'}
               style={styles.input}
               placeholder="Street Number"
+            />
+          </View>
+
+          <View style={styles.formField}>
+            <Text style={styles.label}>Area</Text>
+            <TextInput
+              value={area}
+              onChangeText={(text) => setArea(text)}
+              placeholderTextColor={'gray'}
+              style={styles.input}
+              placeholder="Area"
             />
           </View>
 
