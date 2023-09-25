@@ -27,13 +27,9 @@ const ProfileScreen = () => {
         const response = await API.get(
           "/user/"
           );
-        console.log('Response for user is', response.data)
         const id = response.data.id;
-        console.log("Name is ",response.data.id)
         setUserId(id)
-        // console.log('Profile setting user id', id)
         setUserName(response.data.name);
-        // console.log('Profile Done setting', userId)
       } catch (error) {
         console.log("Error fetching user details", error);
       }
@@ -55,9 +51,8 @@ const ProfileScreen = () => {
         const response = await API.get(
           '/order/'
         );
-        console.log('Orders are', response.data)
+        // console.log('Orders are', response.data)
         const fetchedOrders = response.data;
-        // console.log("TYPE OF ORDERS IS",(fetchedOrders))
         setOrders(fetchedOrders)
         setLoading(false);
         console.log('ORDERS in ARRAY', orders.length)
@@ -67,23 +62,19 @@ const ProfileScreen = () => {
     };
     fetchOrders();
   }, []);
-  // console.log("orders are", orders);
   return (
-    <View>
+    <View style={{justifyContent:'space-between', flexGrow:1,}}>
       <SearchProduct />
-        <View style={{
-          flex:0,
-          flexDirection: 'column',
-          // justifyContent:'space-between',
-          backgroundColor:'white'}}
-        >
-        <View style={{flex:0,marginLeft:10, flexGrow:1}}>
+      <View style={styles.container}
+      >
+        <View style={styles.header}>
           <Text style={{fontSize:26, fontWeight:'bold'}}>Hi, {userName}</Text>
         </View>
-        <View style={{flex:0,maxHeight:600}}>
+        <ScrollView style={styles.address}>
           <AddressScreen />
-        </View>
-
+        </ScrollView>
+        <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
+      </View>
         {/* ORDERS */}
         {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {loading ? (
@@ -103,8 +94,7 @@ const ProfileScreen = () => {
                     )}
                   </ScrollView> */}
 
-        <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
-      </View>
+
     </View>
   );
 };
@@ -113,23 +103,30 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
+    flex:0,
     flexDirection: 'column',
+    flexGrow:1,
     justifyContent:'space-between',
-    backgroundColor:'yellow',
-    
+    backgroundColor:'white'
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 30,
-    marginTop: 12,
-    paddingHorizontal: 20,
+  header: {
+    flex:0,
+    flexGrow:0,
+    backgroundColor:'white',
+  },
+  address:{
+    flex:1,
+    flexGrow:1,
+    marginVertical:10,
+    // maxHeight:500
   },
   button: {
     flex: 0,
     flexGrow:0,
+    flexShrink:0,
     padding: 20,
-    marginHorizontal:10,
+    marginHorizontal:40,
+    marginBottom:10,
     backgroundColor: 'darkred',
     borderRadius: 3,
   },
