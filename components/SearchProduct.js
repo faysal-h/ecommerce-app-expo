@@ -76,8 +76,9 @@ const SearchProduct = () => {
             value={search}
         />
         {search === '' ? (
-            console.log('empty string')
-        //   <Text style={styles.emptySearchText}>Enter a search term</Text>
+          <Text />
+            // console.log('empty string')
+          // <Text style={styles.emptySearchText}>Enter a search term</Text>
         ) : loading ? (
           <ActivityIndicator size="large" style={styles.loader} />
         ) : error ? (
