@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable, FlatList } from "react-native";
 import API from "../axios/AxiosConfig";
 import { useNavigation } from "@react-navigation/native";
 import { PRIMARY_COLOR } from "../constants/constant";
 import SearchProduct from "../components/SearchProduct";
+import { ScrollView } from "react-native";
 
 const CategoryScreen = () => {
     const navigation = useNavigation();
@@ -24,14 +25,15 @@ const CategoryScreen = () => {
       navigation.navigate('Products', { category: selectedCategory });
       };
     return(
-        <View style={{flexDirection:'column', flexGrow:1}}>
+        <View style={{flexGrow:1}}>
           <SearchProduct />
-          <View style={{backgroundColor:PRIMARY_COLOR, alignItems:'center'}}>
+          {/* HEADER */}
+          <View style={{flex:0, flexShrink:1, minHeight:5,backgroundColor:PRIMARY_COLOR, alignItems:'center'}}>
 
             <Text style={styles.title}>Categories</Text>
           </View>
           {/* CATGORY AREA */}
-          <View style={styles.container}>
+          <ScrollView style={{flex:1, flexGrow:1}}>
             <View style={styles.buttonContainer}>
             {categories.map((item) => (
                 <Pressable
@@ -63,19 +65,18 @@ const CategoryScreen = () => {
                 </Pressable>
               ))}
             </View>
-          </View>
+          </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-      // flex:1,
       flexGrow:1,
       padding: 10,
-      justifyContent:'center',
+      // justifyContent:'center',
       // backgroundColor: '#f1f4e9',
-      backgroundColor: 'white',
+      backgroundColor: 'pink',
     },
     title: {
       margin:10,
