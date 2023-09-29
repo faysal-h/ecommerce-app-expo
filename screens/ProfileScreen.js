@@ -68,7 +68,7 @@ const ProfileScreen = () => {
       <View style={styles.container}
       >
         <View style={styles.header}>
-          <Text style={{fontSize:26, fontWeight:'bold'}}>Hi, {userName}</Text>
+          <Text style={{fontSize:26, fontWeight:'bold', marginLeft:10}}>Hi, {userName}</Text>
         </View>
         <ScrollView style={styles.address}>
           <AddressScreen />

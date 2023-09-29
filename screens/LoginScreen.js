@@ -17,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5 } from '@expo/vector-icons';
 import PhoneInput
 	from 'react-native-phone-input';
+import { API_URL } from "../constants/constant";
 
 const LoginScreen = () => {
   const [phone, setPhone] = useState("");
@@ -42,7 +43,7 @@ const LoginScreen = () => {
       password: password,
     };
     axios
-      .post("http://localhost:8000/token/", user)
+      .post(`${API_URL}/token/`, user)
       .then((response) => {
         const accessToken = response.data.access;
         const refreshToken = response.data.refresh;

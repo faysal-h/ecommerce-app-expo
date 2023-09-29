@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import PhoneInput
 	from 'react-native-phone-input';
+import { API_URL } from "../constants/constant";
 
 
 const RegisterScreen = () => {
@@ -37,7 +38,7 @@ const RegisterScreen = () => {
 
       // send a POST  request to the backend API to register the user
       axios
-        .post("http://localhost:8000/register/", user)
+        .post(`${API_URL}/register/`, user)
         .then((response) => {
           Alert.alert(
             "Registration successful",
