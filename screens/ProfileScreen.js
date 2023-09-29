@@ -1,14 +1,11 @@
 import {
-  Image,
   StyleSheet,
   Text,
   View,
   ScrollView,
-  Pressable,
 } from "react-native";
 import React, { useEffect, useContext, useState, useCallback } from "react";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { UserType } from "../UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddressScreen from "./AddressScreen";
 import API from "../axios/AxiosConfig";
@@ -16,7 +13,6 @@ import CustomButton from "../components/CustomButton";
 import SearchProduct from "../components/SearchProduct";
 
 const ProfileScreen = () => {
-  const { userId, setUserId } = useContext(UserType);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
@@ -28,7 +24,6 @@ const ProfileScreen = () => {
           "/user/"
           );
         const id = response.data.id;
-        setUserId(id)
         setUserName(response.data.name);
       } catch (error) {
         console.log("Error fetching user details", error);

@@ -5,24 +5,38 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   TextInput,
-  Pressable,
   Alert,
 } from "react-native";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserType } from "../UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import API from "../axios/AxiosConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5 } from '@expo/vector-icons';
 import PhoneInput
 	from 'react-native-phone-input';
 import { API_URL } from "../constants/constant";
+import CustomButton from "../components/CustomButton"
 
 const LoginScreen = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  const { userId, setUserId } = useContext(UserType);
+  const fetchUserID = async () => {
+    try {
+      const response = await API.get(
+        "/user/"
+        );
+      const id = response.data.id;
+      setUserId(id)
+    } catch (error) {
+      console.log("Error fetching user details", error);
+    }
+  };
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -49,6 +63,7 @@ const LoginScreen = () => {
         const refreshToken = response.data.refresh;
         AsyncStorage.setItem("authToken", accessToken);
         AsyncStorage.setItem("refreshToken", refreshToken);
+        fetchUserID();
         navigation.replace("Main");
       })
       .catch((error) => {
@@ -104,19 +119,21 @@ const LoginScreen = () => {
 
         <View style={{ marginTop: 40 }} />
 
-        <Pressable onPress={handleLogin} style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </Pressable>
+        <CustomButton 
+          onPress={handleLogin}
+          customStyle={styles.loginButton}
+          buttonText={'Login'}
+        />
 
           <Text style={{paddingTop:20, paddingBottom:10, textAlign: 'center', color: 'gray', fontSize: 16 }}>
             Don't have an account?
           </Text>
 
-        <Pressable onPress={() => navigation.navigate('Register')} style={styles.signUpButton}>
-          <Text style={{ textAlign: 'center', color: 'white', fontSize: 16 }}>
-            Sign Up
-          </Text>
-        </Pressable>
+        <CustomButton 
+          onPress={() => navigation.navigate('Register')} 
+          customStyle={styles.signUpButton}
+          buttonText={'Sign Up'}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
