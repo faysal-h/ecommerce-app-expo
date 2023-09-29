@@ -19,6 +19,7 @@ import axios from "axios";
 import PhoneInput
 	from 'react-native-phone-input';
 import { API_URL } from "../constants/constant";
+import CustomButton from "../components/CustomButton";
 
 
 const RegisterScreen = () => {
@@ -47,6 +48,7 @@ const RegisterScreen = () => {
           setUserName("");
           setPhone("");
           setPassword("");
+          navigation.goBack();
         })
         .catch((error) => {
           Alert.alert(
@@ -131,17 +133,19 @@ const RegisterScreen = () => {
         </View>
 
         <View style={{ marginTop: 40 }} />
-
-        <Pressable onPress={handleRegister} style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </Pressable>
+        <CustomButton
+          customStyle={styles.button}
+          buttonText={'Register'}
+          onPress={handleRegister}
+          />
         <Text style={{paddingTop:20, paddingBottom:10, textAlign: 'center', color: 'gray', fontSize: 16 }}>
           Already have an account?
         </Text>
-
-        <Pressable onPress={() => navigation.goBack()} style={styles.loginButton}>
-          <Text style={styles.buttonText}>Sign In</Text>
-        </Pressable>
+        <CustomButton
+          customStyle={styles.loginButton}
+          buttonText={'Sign In'}
+          onPress={() => navigation.goBack()}
+          />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

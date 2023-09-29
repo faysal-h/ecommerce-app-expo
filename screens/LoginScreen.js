@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { UserType } from "../UserContext";
@@ -24,6 +25,7 @@ import CustomButton from "../components/CustomButton"
 const LoginScreen = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const { userId, setUserId } = useContext(UserType);
   const fetchUserID = async () => {
@@ -52,6 +54,8 @@ const LoginScreen = () => {
     checkLoginStatus();
   }, []);
   const handleLogin = () => {
+    if(phone.length >1 && password.length > 1){
+    setLoading(true)
     const user = {
       phone: phone,
       password: password,
@@ -64,13 +68,17 @@ const LoginScreen = () => {
         AsyncStorage.setItem("authToken", accessToken);
         AsyncStorage.setItem("refreshToken", refreshToken);
         fetchUserID();
+        setLoading(false)
         navigation.replace("Main");
       })
       .catch((error) => {
+        setLoading(false)
         Alert.alert("Login Error Occured", "Invalid Phone Number");
         console.log(error);
       });
+  }else{Alert.alert('Error','Phone Number or Password cannot be empty.')}
   };
+
   
   return (
     <SafeAreaView style={styles.container}>
@@ -118,12 +126,22 @@ const LoginScreen = () => {
         </View>
 
         <View style={{ marginTop: 40 }} />
-
-        <CustomButton 
-          onPress={handleLogin}
-          customStyle={styles.loginButton}
-          buttonText={'Login'}
-        />
+        {
+        loading ? 
+          (
+          <View style={styles.loginButton}>
+            <ActivityIndicator size="small" />
+          </View>
+          )
+            :
+          (
+            <CustomButton 
+              onPress={handleLogin}
+              customStyle={styles.loginButton}
+              buttonText={'Login'}
+            />
+          )
+        }
 
           <Text style={{paddingTop:20, paddingBottom:10, textAlign: 'center', color: 'gray', fontSize: 16 }}>
             Don't have an account?
@@ -166,14 +184,17 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 5,
     marginTop: 30,
+    width:300,
   },
   inputIcon: {
     marginLeft: 8,
   },
   inputText: {
+    flex:1,
     color: 'gray',
-    marginVertical: 10,
-    width: 300,
+    // marginVertical: 10,
+    paddingVertical: 10,
+    // width: 300,
     fontSize: 16,
   },
   keepLoggedIn: {
@@ -209,5 +230,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     fontSize: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'red',
   },
 });
