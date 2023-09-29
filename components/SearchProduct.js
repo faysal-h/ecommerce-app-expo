@@ -46,7 +46,6 @@ const SearchProduct = () => {
         // Handle the press action here, e.g., navigate to a product detail screen
         console.log(`Pressed on ${item?.name}`);
         navigation.navigate("Info", {item: item,});
-        
       }}
       style={styles.itemContainer}
     >
@@ -56,7 +55,6 @@ const SearchProduct = () => {
       />
       <View style={styles.itemTextContainer}>
         <Text style={styles.itemName}>{item.name}</Text>
-        {/* Add more product details here */}
       </View>
     </Pressable>
   );
@@ -69,31 +67,30 @@ const SearchProduct = () => {
       <View style={styles.container}>
         <SearchBar
             lightTheme
-            containerStyle={{backgroundColor: PRIMARY_COLOR, borderWidth: 1, borderRadius: 5}}
+            containerStyle={{backgroundColor: PRIMARY_COLOR, borderWidth: 0, borderRadius: 3}}
             inputContainerStyle={{backgroundColor: 'white'}}
             placeholder="Search for products..."
             onChangeText={handleSearch}
             value={search}
         />
-        {search === '' ? (
-          <Text />
-            // console.log('empty string')
-          // <Text style={styles.emptySearchText}>Enter a search term</Text>
-        ) : loading ? (
-          <ActivityIndicator size="large" style={styles.loader} />
-        ) : error ? (
-          <Text style={styles.error}>{error}</Text>
-        ) : (
-          <FlatList
-            data={filteredData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            style={styles.flatList}
-            ListEmptyComponent={
-              <Text style={styles.emptyList}>No matching products found</Text>
-            }
-          />
+        {search !== '' && (
+          loading ? (
+            <ActivityIndicator size="large" style={styles.loader} />
+          ) : error ? (
+            <Text style={styles.error}>{error}</Text>
+          ) : (
+            <FlatList
+              data={filteredData}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              style={styles.flatList}
+              ListEmptyComponent={
+                <Text style={styles.emptyList}>No matching products found</Text>
+              }
+            />
+          )
         )}
+
       </View>
     );
   };
@@ -104,7 +101,8 @@ const SearchProduct = () => {
       backgroundColor: 'white',
     },
     flatList: {
-      backgroundColor: '#e1e8ee',
+      flex:0,
+      backgroundColor: 'white',
       margin: 0,
     },
     itemContainer: {
