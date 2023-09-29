@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, ScrollView, Pressable,Alert } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useState, useContext, useCallback } from "react";
 import { UserType } from "../UserContext";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -23,16 +24,18 @@ const ConfirmationScreen = () => {
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
-  const [addresses, setAddresses] = useState(["H.No.160"]);
+  const [addresses, setAddresses] = useState([]);
   const { userId, setUserId } = useContext(UserType);
   const cart = useSelector((state) => state.cart.cart);
   const total = cart
     ?.map((item) => item.price * item.quantity)
     .reduce((curr, prev) => curr + prev, 0);
   const finalTotal = total < 5000 ? total + 500 : total;
-  useEffect(() => {
-    fetchAddresses();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddresses();
+    }, [])
+  );
   const fetchAddresses = async () => {
     try {
       const response = await API.get(
@@ -156,7 +159,21 @@ const ConfirmationScreen = () => {
           <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical:5,color:'black' }}>
             Select a Delivery Address
           </Text>
-
+          {/* ADD NEW ADDRESS BUTTON */}
+          {addresses.length === 0 ? (
+            <CustomButton
+              onPress={() => navigation.navigate("New")
+              }
+              customStyle={{
+                backgroundColor: 'blue',
+                padding: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 10,
+              }}
+              buttonText={'Add new address'}
+            />
+          ) : null}
           <Pressable>
             {addresses?.map((item, index) => (
               <Pressable
@@ -169,17 +186,6 @@ const ConfirmationScreen = () => {
                     : null,
                       ]}
                 >
-                {/* {selectedAddress && selectedAddress.id === item?.id ? (
-                  <FontAwesome5 name="dot-circle" size={40} color="#008397" />
-                ) : (
-                  <Entypo
-                    onPress={() => setSelectedAdress(item)}
-                    name="circle"
-                    size={40}
-                    color="gray"
-                  />
-                )} */}
-
                 <View style={{ marginLeft: 6 }}>
                   <View
                     style={{
