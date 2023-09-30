@@ -11,6 +11,7 @@ import AddressScreen from "./AddressScreen";
 import API from "../axios/AxiosConfig";
 import CustomButton from "../components/CustomButton";
 import SearchProduct from "../components/SearchProduct";
+import OrdersList from "../components/OrdersList";
 
 const ProfileScreen = () => {
   const [orders, setOrders] = useState([]);
@@ -65,31 +66,21 @@ const ProfileScreen = () => {
         <View style={styles.header}>
           <Text style={{fontSize:26, fontWeight:'bold', marginLeft:10}}>Hi, {userName}</Text>
         </View>
-        <ScrollView style={styles.address}>
-          <AddressScreen />
-        </ScrollView>
-        <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
-      </View>
-        {/* ORDERS */}
-        {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {loading ? (
-            <Text>Loading...</Text>
-            ) : orders?.length > 0 ? (
-              orders.map((order) => (
-                <Pressable style={styles.orderItem} key={order.id}>
-                {order.cart_items.slice(0, 1)?.map((product) => (
-                  <View style={styles.orderImage} key={product.id}>
-                  <Image source={{ uri: product.image }} />
-                  </View>
-                  ))}
-                  </Pressable>
-                  ))
-                  ) : (
-                    <Text>No orders found</Text>
-                    )}
-                  </ScrollView> */}
-
-
+          <ScrollView style={styles.address}>
+            <AddressScreen />
+          </ScrollView>
+          <Text
+            style={{
+              height: 1,
+              borderColor: "#D0D0D0",
+              borderWidth: 2,
+            }}
+          />
+          <ScrollView style={styles.address}>
+            <OrdersList />
+          </ScrollView>
+          <CustomButton onPress={logout} buttonText={'Logout'} customStyle={styles.button}/>
+        </View>
     </View>
   );
 };
@@ -112,8 +103,14 @@ const styles = StyleSheet.create({
   address:{
     flex:1,
     flexGrow:1,
-    marginVertical:10,
-    // maxHeight:500
+    marginVertical:5,
+    marginHorizontal:10,
+    // paddingVertical:10,
+    // borderRadius:3,
+    // borderWidth:2,
+    // borderColor:'gray',
+    minHeight:200,
+    maxHeight:400
   },
   button: {
     flex: 0,

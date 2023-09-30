@@ -61,10 +61,12 @@ const ConfirmationScreen = () => {
         payment_method: selectedOption,
       };
       console.log("ORDER", orderData)
+      userId?console.log('Customer logged in'):console.log('Customer Logged out. Check');
       const response = await API.post(
         "/order/",
         orderData
       );
+      console.log('order sent')
       if (response.status === 201) {
         setCurrentStep(0)
         navigation.navigate("Order");

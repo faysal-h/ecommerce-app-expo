@@ -2,15 +2,12 @@ import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Pressable,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-
 import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-
 import API from "../axios/AxiosConfig";
 
 

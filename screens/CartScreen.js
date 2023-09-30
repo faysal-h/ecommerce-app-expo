@@ -70,6 +70,7 @@ const CartScreen = () => {
   };
   
   const createCart = async () => {
+    if(cart.length>0){
     try {
       // Clear the cart
       const responseClearCart = await API.delete("/clear-cart/");
@@ -96,6 +97,8 @@ const CartScreen = () => {
       }
     } catch (error) {
       console.error("Error in createCart:", error);
+    }}else{
+      Alert.alert('Empty Cart', 'Add something to place an order.')
     }
   };
   return (
@@ -209,7 +212,7 @@ const CartScreen = () => {
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>{total?.toFixed(2)}</Text>
         </View>
         <CustomButton
-          onPress={cart.length? () => createCart() :Alert.alert('Empty Cart', 'Add something to place an order.')}
+          onPress={createCart}
           customStyle={{paddingHorizontal:40, borderRadius:3, backgroundColor:'#008E97',paddingVertical:15}}
           buttonText={cart.length?`Buy ${cart.length} items`:"Cart is Empty"}
         />
