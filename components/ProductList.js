@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
-import { View, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl, Dimensions} from "react-native";
 import ProductItem from "../components/ProductItem";
 import API from "../axios/AxiosConfig";
 
+const { width } = Dimensions.get('window');
+const numberOfColumns = 2;
+const columnPadding = 5; // Adjust this value as needed
 
 const ProductList = ({ route }) => {
   const { category } = route?.params || {}; // Destructure category from route.params or set it to an empty object if route is undefined
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(width);
+
+  // Function to calculate the column width based on screen size
+  const getColumnWidth = () => {
+    return (screenWidth - (columnPadding * (numberOfColumns-2))) / numberOfColumns;
+  };
 
   const fetchData = async () => {
     try {
@@ -45,9 +54,9 @@ const ProductList = ({ route }) => {
   }, [category]); // Refetch data when the category changes
 
   return (
-    <View style={{flex:0, alignItems:'center',overflow:'hidden'}}>
+    <View >
       <FlatList
-        style={{}}
+        // style={{columnGap:20}}
         data={products}
         keyExtractor={(item) => item.id.toString()}
         refreshControl={
@@ -55,11 +64,11 @@ const ProductList = ({ route }) => {
         }
         numColumns={2}
         renderItem={({ item }) => (
-          <View key={item.id} style={{ }}>
+          <View key={item.id} style={{ width: getColumnWidth(), paddingHorizontal: columnPadding }}>
             <ProductItem item={item} />
           </View>
         )}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
       />
 
     </View>

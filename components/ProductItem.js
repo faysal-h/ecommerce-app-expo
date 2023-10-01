@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Pressable, Image, Dimensions } from "react-nati
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import AddToCart from "./AddToCart";
+import { PRIMARY_COLOR } from "../constants/constant";
 
 // screen sizing
 const { width, height } = Dimensions.get('window');
@@ -31,7 +32,7 @@ const ProductItem = ({ item }) => {
         )}
     >
       <Image
-        style={{marginTop:10, width: 125, height: 125, resizeMode: "contain",alignSelf:'center' }}
+        style={{marginTop:5, width: 125, height: 125, resizeMode: 'center',alignSelf:'center' }}
         source={{ uri: item?.image }}
       />
       
@@ -59,18 +60,16 @@ export default ProductItem;
 
 const styles = StyleSheet.create({
   item: {
-    margin: PRODUCT_ITEM_OFFSET,
-    overflow: 'hidden',
-    borderRadius: 3,
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
-    height: PRODUCT_ITEM_HEIGHT,
-    flexDirection: 'column',
-    elevation: 1,
+    // elevation:1,
+    borderColor:PRIMARY_COLOR,
+    borderWidth:1,
+    borderRadius:3,
+    // borderColor:'rsed',
+    marginHorizontal:0,
+    marginVertical:5,
   },
   itemImage: {
-    width: (SCREEN_WIDTH - PRODUCT_ITEM_MARGIN) / numColumns -
-      PRODUCT_ITEM_MARGIN,
+    width: (SCREEN_WIDTH),
     height: 125,
     justifyContent: 'center',
     alignItems: 'center',
