@@ -45,8 +45,9 @@ const ProductList = ({ route }) => {
   }, [category]); // Refetch data when the category changes
 
   return (
-    <View>
+    <View style={{flex:0, alignItems:'center',overflow:'hidden'}}>
       <FlatList
+        style={{}}
         data={products}
         keyExtractor={(item) => item.id.toString()}
         refreshControl={
@@ -54,12 +55,13 @@ const ProductList = ({ route }) => {
         }
         numColumns={2}
         renderItem={({ item }) => (
-          <View key={item.id}>
+          <View key={item.id} style={{ }}>
             <ProductItem item={item} />
           </View>
         )}
         showsVerticalScrollIndicator={false}
       />
+
     </View>
   );
 };

@@ -13,31 +13,12 @@ import SearchProduct from "../components/SearchProduct";
 import { IMAGESLIDER } from "../constants/constant";
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
-  
-
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://fakestoreapi.com/products");
-        setProducts(response.data);
-      } catch (error) {
-        console.log("error message", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const cart = useSelector((state) => state.cart.cart);
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flexGrow:1,justifyContent:'space-between'}}>
         {/* <SearchBarCustom /> */}
         <SearchProduct />
-        <View style={{flex:1, flexShrink:1, minHeight:200}}>
+        <View style={{flex:0, flexGrow:0}}>
         
           {/* SLIDER BOX */}
           <SliderBox
@@ -50,8 +31,7 @@ const HomeScreen = () => {
             // autoplayInterval={500}
           />
 
-        {/* <ScrollView>
-        </ScrollView> */}
+        {/* BORDER */}
           <Text
             style={{
               height: 1,
@@ -60,7 +40,7 @@ const HomeScreen = () => {
             }}
           />
         </View>
-        <View style={{flex:0, flexGrow:1, padding:5, marginTop:5,marginBottom:240}}>
+        <View style={{flex:1, flexGrow:1,}}>
           <ProductList />
         </View>
     </View>
