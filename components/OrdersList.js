@@ -41,6 +41,7 @@ const OrdersList = ({ route }) => {
         <Text>No Orders</Text>
       ) : (
         <View>
+          <Text style={{fontWeight:'bold',fontSize:20}}>Your Past Orders</Text>
           {orders.map((item) => (
             <View key={item.id} style={{ borderWidth: 0.2,borderColor:'#D0D0D0', padding: 5,marginVertical:5, minHeight: 100 }}>
               <Text>Order Date: {(new Date(item?.created_at).toLocaleString('en-GB'))}</Text>

@@ -28,12 +28,12 @@ const CategoryScreen = () => {
         <View style={{flexGrow:1}}>
           <SearchProduct />
           {/* HEADER */}
-          <View style={{flex:0, flexShrink:1, minHeight:5,backgroundColor:PRIMARY_COLOR, alignItems:'center'}}>
+          <View style={styles.header}>
 
             <Text style={styles.title}>Categories</Text>
           </View>
           {/* CATGORY AREA */}
-          <ScrollView style={{flex:1, flexGrow:1}}>
+          <ScrollView style={{flex:1, flexGrow:1, marginTop:35}}>
             <View style={styles.buttonContainer}>
             {categories.map((item) => (
                 <Pressable
@@ -76,14 +76,19 @@ const styles = StyleSheet.create({
       padding: 10,
       // justifyContent:'center',
       // backgroundColor: '#f1f4e9',
-      backgroundColor: 'pink',
+      // backgroundColor: 'pink',
     },
+    header:{flex:0, 
+      flexShrink:1,
+      minHeight:5,
+      backgroundColor:PRIMARY_COLOR,
+      alignItems:'center'},
     title: {
       margin:10,
       verticalAlign:'middle',
       flexDirection:'row',
       fontSize: 26,
-      color:'black',
+      color:'white',
       fontWeight: 'bold',
       marginBottom: 10,
     },

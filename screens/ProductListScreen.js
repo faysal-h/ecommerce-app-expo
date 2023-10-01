@@ -18,7 +18,7 @@ const ProductListScreen = ({route}) => {
                 <GoBack />
             </View>
             <View style={{flexDirection:'row',justifyContent:'center',flexGrow:1,marginRight:40}}>
-                <Text style={{margin:10,fontSize:26,fontWeight:'bold', color:'black'}}>
+                <Text style={{margin:10,fontSize:26,fontWeight:'bold', color:'white'}}>
                     {route?.params?.category}
                 </Text>
             </View>
